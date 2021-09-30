@@ -7,6 +7,12 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.36",
+    "@fortawesome/free-brands-svg-icons": "^5.15.4",
+    "@fortawesome/free-regular-svg-icons": "^5.15.4",
+    "@fortawesome/free-solid-svg-icons": "^5.15.4",
+    "@fortawesome/vue-fontawesome": "^2.0.2",
+    "axios": "^0.21.4",
     "core-js": "^3.6.5",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
@@ -14,6 +20,7 @@
     "prettier": "^2.4.1",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
+    "vue-toastr": "^2.1.2",
     "vuex": "^3.4.0"
   },
   "devDependencies": {

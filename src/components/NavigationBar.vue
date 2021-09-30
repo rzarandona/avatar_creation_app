@@ -1,25 +1,14 @@
 <template>
-	<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-		<div class="container">
-			<a class="navbar-brand" href="#">WAT Avatar Builder</a>
-			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-			<div class="collapse navbar-collapse" id="navbarTogglerDemo02">
-				<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-					<li class="nav-item">
-						<a class="nav-link active" aria-current="page" href="#">Home</a>
-					</li>
-				</ul>
-			</div>
-		</div>
-	</nav>
+  <nav class="container">
+    <img
+      src="https://primeunicornindex.com/wp-content/uploads/2019/09/gitlab-logo-gray-rgb.png"
+      alt=""
+    />
+  </nav>
 </template>
 
 <style lang="scss">
-	nav{
-		p{
-			margin:0
-		}
-	}
+nav img {
+  width: 150px;
+}
 </style>
