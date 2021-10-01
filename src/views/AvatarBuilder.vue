@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <transition name="fade">
-      <div v-if="!picked_gender" class="gender-picker">
+      <div v-if="false" class="gender-picker">
         <h1 class="text-center my-5">Pick one!</h1>
         <div class="gender-list">
           <div @click="setGender('male')" class="gender-item male">
@@ -17,7 +17,7 @@
       </div>
     </transition>
     <transition name="fade">
-      <div class="builder-wrapper" v-if="picked_gender">
+      <div class="builder-wrapper" v-if="!picked_gender">
         <h1 class="text-center my-5">Create Your Avatar!</h1>
         <div class="card">
           <div class="builder-interface">
@@ -90,7 +90,7 @@
               >
                 <div
                   v-for="item in avatar.hair"
-                  @click="setPart('hair', item)"
+                  @click="setPart('hair', item, true)"
                   :class="{ 'option-item': true, active: hair == item }"
                 >
                   <img :src="getPart(item)" alt="" />
@@ -103,7 +103,7 @@
               >
                 <div
                   v-for="item in avatar.head"
-                  @click="setPart('head', item)"
+                  @click="setPart('head', item, true)"
                   :class="{ 'option-item': true, active: head == item }"
                 >
                   <img :src="getPart(item)" alt="" />
@@ -116,7 +116,7 @@
               >
                 <div
                   v-for="item in avatar.shirt"
-                  @click="setPart('shirt', item)"
+                  @click="setPart('shirt', item, true)"
                   :class="{ 'option-item': true, active: shirt == item }"
                 >
                   <img :src="getPart(item)" alt="" />
@@ -129,7 +129,7 @@
               >
                 <div
                   v-for="item in avatar.pants"
-                  @click="setPart('pants', item)"
+                  @click="setPart('pants', item, true)"
                   :class="{ 'option-item': true, active: pants == item }"
                 >
                   <img :src="getPart(item)" alt="" />
@@ -142,7 +142,7 @@
               >
                 <div
                   v-for="item in avatar.eyes"
-                  @click="setPart('eyes', item)"
+                  @click="setPart('eyes', item, true)"
                   :class="{ 'option-item': true, active: eyes == item }"
                 >
                   <img :src="getPart(item)" alt="" />
@@ -155,7 +155,7 @@
               >
                 <div
                   v-for="item in avatar.nose"
-                  @click="setPart('nose', item)"
+                  @click="setPart('nose', item, true)"
                   :class="{ 'option-item': true, active: nose == item }"
                 >
                   <img :src="getPart(item)" alt="" />
@@ -168,7 +168,7 @@
               >
                 <div
                   v-for="item in avatar.mouth"
-                  @click="setPart('mouth', item)"
+                  @click="setPart('mouth', item, true)"
                   :class="{ 'option-item': true, active: mouth == item }"
                 >
                   <img :src="getPart(item)" alt="" />
@@ -179,8 +179,16 @@
         </div>
         <div class="builder-tools">
           <div class="set-1">
-            <button @click="undo" class="undo">Undo</button>
-            <button @click="redo" class="redo">Redo</button>
+            <button
+              :disabled="action_observer == avatar_snapshots.length - 1"
+              @click="undo"
+              class="undo"
+            >
+              Undo
+            </button>
+            <button :disabled="action_observer == 0" @click="redo" class="redo">
+              Redo
+            </button>
             <button class="randomise">Randomise</button>
             <button class="reset">Reset</button>
           </div>
@@ -240,7 +248,7 @@ export default {
       is_error: false,
 
       // Undo/Redo Feature
-      actions: [],
+      avatar_snapshots: [],
       action_observer: 0,
     };
   },
@@ -274,13 +282,30 @@ export default {
     getPart(part) {
       return this.base_url + part + ".PNG";
     },
-    setPart(part, value) {
-      if (this.action_observer != 0) {
-        this.actions = [];
-        this.action_observer = 0;
-      }
+    setPart(part, value, persist_as_snapshot) {
       this[part] = value;
-      this.actions.unshift({ part: part, value: value });
+      if (persist_as_snapshot) {
+        if (this.action_observer != 0) {
+          let avatar_snapshots_reference = [...this.avatar_snapshots];
+          let new_avatar_snapshots_reference = avatar_snapshots_reference.slice(
+            this.action_observer
+          );
+          new_avatar_snapshots_reference.unshift({
+            body: this.body,
+            head: this.head,
+            shirt: this.shirt,
+            pants: this.pants,
+            eyes: this.eyes,
+            nose: this.nose,
+            mouth: this.mouth,
+            hair: this.hair,
+          });
+          this.avatar_snapshots = new_avatar_snapshots_reference;
+          this.action_observer = 0;
+        } else {
+          this.saveCurrentSnapshot();
+        }
+      }
     },
     setActivePill(active_pill) {
       this.active_pill = active_pill;
@@ -294,35 +319,45 @@ export default {
       this.picked_gender = true;
     },
     undo() {
-      if (this.action_observer + 1 != this.actions.length) {
+      if (this.action_observer < this.avatar_snapshots.length - 1) {
         this.action_observer = this.action_observer + 1;
-        // console.log(
-        //   this.actions[this.action_observer].part +
-        //     ":" +
-        //     this.actions[this.action_observer].value
-        // );
-        this.setObserver();
+        let mapped_snapshot = this.avatar_snapshots[this.action_observer];
+        this.applySnapshot(mapped_snapshot);
       }
     },
     redo() {
-      if (this.action_observer > 0) {
+      if (this.action_observer != 0) {
         this.action_observer = this.action_observer - 1;
-        // console.log(
-        //   this.actions[this.action_observer].part +
-        //     ":" +
-        //     this.actions[this.action_observer].value
-        // );
-        this.setObserver();
+        let mapped_snapshot = this.avatar_snapshots[this.action_observer];
+        this.applySnapshot(mapped_snapshot);
       }
     },
-    setObserver() {
-      let part = this.actions[this.action_observer].part;
-      let value = this.actions[this.action_observer].value;
-      this[part] = value;
+    saveCurrentSnapshot() {
+      let avatar_snapshot = {
+        body: this.body,
+        head: this.head,
+        shirt: this.shirt,
+        pants: this.pants,
+        eyes: this.eyes,
+        nose: this.nose,
+        mouth: this.mouth,
+        hair: this.hair,
+      };
+      this.avatar_snapshots.unshift(avatar_snapshot);
+      console.log(this.avatar_snapshots);
+    },
+    applySnapshot(snapshot) {
+      let snapshot_keys = Object.keys(snapshot);
+      snapshot_keys.forEach((key) => {
+        this.setPart(key, snapshot[key], false);
+      });
     },
   },
   components: {
     "font-awesome-icon": FontAwesomeIcon,
+  },
+  created() {
+    this.saveCurrentSnapshot();
   },
 };
 </script>
