@@ -179,8 +179,8 @@
         </div>
         <div class="builder-tools">
           <div class="set-1">
-            <button class="undo">Undo</button>
-            <button class="redo">Redo</button>
+            <button @click="undo" class="undo">Undo</button>
+            <button @click="redo" class="redo">Redo</button>
             <button class="randomise">Randomise</button>
             <button class="reset">Reset</button>
           </div>
@@ -238,6 +238,10 @@ export default {
 
       // Set to true when an image is not found
       is_error: false,
+
+      // Undo/Redo Feature
+      actions: [],
+      action_observer: 0,
     };
   },
   computed: {
@@ -271,7 +275,12 @@ export default {
       return this.base_url + part + ".PNG";
     },
     setPart(part, value) {
+      if (this.action_observer != 0) {
+        this.actions = [];
+        this.action_observer = 0;
+      }
       this[part] = value;
+      this.actions.unshift({ part: part, value: value });
     },
     setActivePill(active_pill) {
       this.active_pill = active_pill;
@@ -283,6 +292,33 @@ export default {
     setGender(gender) {
       this.gender = gender;
       this.picked_gender = true;
+    },
+    undo() {
+      if (this.action_observer + 1 != this.actions.length) {
+        this.action_observer = this.action_observer + 1;
+        // console.log(
+        //   this.actions[this.action_observer].part +
+        //     ":" +
+        //     this.actions[this.action_observer].value
+        // );
+        this.setObserver();
+      }
+    },
+    redo() {
+      if (this.action_observer > 0) {
+        this.action_observer = this.action_observer - 1;
+        // console.log(
+        //   this.actions[this.action_observer].part +
+        //     ":" +
+        //     this.actions[this.action_observer].value
+        // );
+        this.setObserver();
+      }
+    },
+    setObserver() {
+      let part = this.actions[this.action_observer].part;
+      let value = this.actions[this.action_observer].value;
+      this[part] = value;
     },
   },
   components: {
