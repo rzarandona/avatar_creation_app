@@ -1,100 +1,150 @@
 <template>
   <div class="container">
-    <transition name="fade">
-      <div v-if="false" class="gender-picker">
-        <h1 class="text-center my-5">Pick one!</h1>
-        <div class="gender-list">
-          <div @click="setGender('male')" class="gender-item male">
-            <div class="label">Male</div>
-          </div>
-          <div @click="setGender('female')" class="gender-item female">
-            <div class="label">Female</div>
-          </div>
-          <div @click="setGender('non-binary')" class="gender-item non-binary">
-            <div class="label">Non-Binary</div>
-          </div>
+    <div v-if="!gender.length" class="gender-picker">
+      <h1 class="main-label text-center mb-5">Pick one!</h1>
+      <div class="gender-list">
+        <div @click="setGender('male')" class="gender-item male">
+          <font-awesome-icon class="gender-icon" icon="mars" />
+          <div class="label">Male</div>
+        </div>
+        <div @click="setGender('female')" class="gender-item female">
+          <font-awesome-icon class="gender-icon" icon="venus" />
+          <div class="label">Female</div>
+        </div>
+        <div @click="setGender('non-binary')" class="gender-item non-binary">
+          <font-awesome-icon class="gender-icon" icon="venus-mars" />
+          <div class="label">Non-Binary</div>
         </div>
       </div>
-    </transition>
-    <transition name="fade">
-      <div class="builder-wrapper" v-if="!picked_gender">
-        <h1 class="text-center my-5">Create Your Avatar!</h1>
-        <div class="card">
-          <div class="builder-interface">
-            <div class="preview">
-              <small v-if="is_error" class="my-3 text-danger"
-                >Dev warning: Image instance is not found. Please create one for
-                this combination</small
-              >
-              <div class="preview-container">
-                <img :src="parsedBody" alt="" />
-                <img :src="parsedPants" alt="" />
-                <img :src="parsedShirt" alt="" />
-                <img :src="parsedHead" alt="" />
-                <img :src="parsedEyes" alt="" />
-                <img :src="parsedHair" alt="" />
-                <img :src="parsedNose" alt="" />
-                <img :src="parsedMouth" alt="" />
+    </div>
+
+    <div class="builder-wrapper" v-if="gender.length">
+      <h1 class="main-label text-center mb-5">Create Your Avatar!</h1>
+      <div class="card">
+        <div class="builder-interface">
+          <div class="preview">
+            <small v-if="is_error" class="my-3 text-danger"
+              >Dev warning: Image instance is not found. Please create one for
+              this combination</small
+            >
+            <div class="preview-container">
+              <img :src="parsedBody" alt="" />
+              <img :src="parsedPants" alt="" />
+              <img :src="parsedShirt" alt="" />
+              <img :src="parsedHead" alt="" />
+              <img :src="parsedEyes" alt="" />
+              <img :src="parsedHair" alt="" />
+              <img :src="parsedNose" alt="" />
+              <img :src="parsedMouth" alt="" />
+            </div>
+          </div>
+
+          <div class="customizer">
+            <div class="parent-options">
+              <div class="parent-tab-pills">
+                <button
+                  @click="setActiveParentPill('face', 'head')"
+                  :class="{
+                    'parent-tab-pill': true,
+                    active: active_parent_pill == 'face',
+                  }"
+                >
+                  <span>1</span>
+                  Face
+                </button>
+                <button
+                  @click="setActiveParentPill('garments', 'shirt')"
+                  :class="{
+                    'parent-tab-pill': true,
+                    active: active_parent_pill == 'garments',
+                  }"
+                >
+                  <span>2</span>
+                  Garments
+                </button>
+                <button
+                  @click="setActiveParentPill('accessories', '')"
+                  :class="{
+                    'parent-tab-pill': true,
+                    active: active_parent_pill == 'accessories',
+                  }"
+                >
+                  <span>3</span>
+                  Accessories
+                </button>
+                <button
+                  @click="setActiveParentPill('background', '')"
+                  :class="{
+                    'parent-tab-pill': true,
+                    active: active_parent_pill == 'background',
+                  }"
+                >
+                  <span>4</span>
+                  Background
+                </button>
               </div>
             </div>
 
             <div class="options">
               <div class="tab-pills">
                 <button
+                  v-if="active_parent_pill == 'face'"
                   @click="setActivePill('hair')"
                   :class="{ 'tab-pill': true, active: active_pill == 'hair' }"
                 >
                   Hair
                 </button>
                 <button
+                  v-if="active_parent_pill == 'face'"
                   @click="setActivePill('head')"
                   :class="{ 'tab-pill': true, active: active_pill == 'head' }"
                 >
                   Head
                 </button>
                 <button
-                  @click="setActivePill('shirt')"
-                  :class="{ 'tab-pill': true, active: active_pill == 'shirt' }"
-                >
-                  Shirt
-                </button>
-                <button
-                  @click="setActivePill('pants')"
-                  :class="{ 'tab-pill': true, active: active_pill == 'pants' }"
-                >
-                  Pants
-                </button>
-                <button
+                  v-if="active_parent_pill == 'face'"
                   @click="setActivePill('eyes')"
                   :class="{ 'tab-pill': true, active: active_pill == 'eyes' }"
                 >
                   Eyes
                 </button>
                 <button
+                  v-if="active_parent_pill == 'face'"
                   @click="setActivePill('nose')"
                   :class="{ 'tab-pill': true, active: active_pill == 'nose' }"
                 >
                   Nose
                 </button>
                 <button
+                  v-if="active_parent_pill == 'face'"
                   @click="setActivePill('mouth')"
-                  :class="{ 'tab-pill': true, active: active_pill == 'mouth' }"
+                  :class="{
+                    'tab-pill': true,
+                    active: active_pill == 'mouth',
+                  }"
                 >
                   Mouth
                 </button>
-              </div>
-
-              <div
-                v-if="active_pill == 'hair'"
-                class="option-list hair-options my-3"
-              >
-                <div
-                  v-for="item in avatar.hair"
-                  @click="setPart('hair', item, true)"
-                  :class="{ 'option-item': true, active: hair == item }"
+                <button
+                  v-if="active_parent_pill == 'garments'"
+                  @click="setActivePill('shirt')"
+                  :class="{
+                    'tab-pill': true,
+                    active: active_pill == 'shirt',
+                  }"
                 >
-                  <img :src="getPart(item)" alt="" />
-                </div>
+                  Shirt
+                </button>
+                <button
+                  v-if="active_parent_pill == 'garments'"
+                  @click="setActivePill('pants')"
+                  :class="{
+                    'tab-pill': true,
+                    active: active_pill == 'pants',
+                  }"
+                >
+                  Pants
+                </button>
               </div>
 
               <div
@@ -109,7 +159,18 @@
                   <img :src="getPart(item)" alt="" />
                 </div>
               </div>
-
+              <div
+                v-if="active_pill == 'hair'"
+                class="option-list hair-options my-3"
+              >
+                <div
+                  v-for="item in avatar.hair"
+                  @click="setPart('hair', item, true)"
+                  :class="{ 'option-item': true, active: hair == item }"
+                >
+                  <img :src="getPart(item)" alt="" />
+                </div>
+              </div>
               <div
                 v-if="active_pill == 'shirt'"
                 class="option-list shirt-options my-3"
@@ -177,28 +238,39 @@
             </div>
           </div>
         </div>
-        <div class="builder-tools">
-          <div class="set-1">
-            <button
-              :disabled="action_observer == avatar_snapshots.length - 1"
-              @click="undo"
-              class="undo"
-            >
-              Undo
-            </button>
-            <button :disabled="action_observer == 0" @click="redo" class="redo">
-              Redo
-            </button>
-            <button class="randomise">Randomise</button>
-            <button class="reset">Reset</button>
-          </div>
-          <div class="set-2">
-            <button class="share">Share</button>
-            <button class="download">Download Avatar!</button>
-          </div>
+      </div>
+      <div class="builder-tools">
+        <div class="set-1">
+          <button
+            :disabled="action_observer == avatar_snapshots.length - 1"
+            @click="undo"
+            class="undo"
+          >
+            <font-awesome-icon icon="undo" />
+            Undo
+          </button>
+          <button :disabled="action_observer == 0" @click="redo" class="redo">
+            <font-awesome-icon icon="redo" />
+            Redo
+          </button>
+          <button class="randomise">
+            <font-awesome-icon icon="random" /> Randomise
+          </button>
+          <button class="reset">
+            <font-awesome-icon icon="trash" /> Reset
+          </button>
+        </div>
+        <div class="set-2">
+          <button class="share">
+            <font-awesome-icon icon="share" /> Share
+          </button>
+          <button class="download">
+            <font-awesome-icon icon="download" /> Download Avatar!
+          </button>
         </div>
       </div>
-    </transition>
+    </div>
+
     <!-- <small style="color:#ccc" class="mt-5">Picture set: {{instance}}</small> -->
   </div>
 </template>
@@ -239,6 +311,7 @@ export default {
       hair: "hr1",
 
       // Controls the tab
+      active_parent_pill: "face",
       active_pill: "hair",
 
       // Controls loading animation
@@ -307,6 +380,10 @@ export default {
         }
       }
     },
+    setActiveParentPill(active_parent_pill, default_active_pill) {
+      this.active_parent_pill = active_parent_pill;
+      this.setActivePill(default_active_pill);
+    },
     setActivePill(active_pill) {
       this.active_pill = active_pill;
     },
@@ -316,7 +393,6 @@ export default {
     },
     setGender(gender) {
       this.gender = gender;
-      this.picked_gender = true;
     },
     undo() {
       if (this.action_observer < this.avatar_snapshots.length - 1) {
@@ -363,6 +439,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+$lightBlue: #e3eeff;
+$orange: #f96424;
+$red: #db3b21;
+$purple: #380d75;
+$purple2: #6e49cb;
+$purple3: #d3c9e1;
+$gray1: #2e2e2e;
+$gray2: #8a8a8a;
+$gray3: #8c929d;
+
+.main-label {
+  color: #515151;
+}
+
 .builder-interface {
   display: grid;
   grid-template-columns: 500px 1fr;
@@ -373,16 +463,6 @@ export default {
   padding: 20px;
   margin: 50px 0;
   border: none;
-}
-
-.wat-button {
-  background: #3d5afe;
-  color: #fff;
-  border: none;
-  padding: 10px;
-  border-radius: 100px;
-  font-size: 14px;
-  transition: 0.2s;
 }
 
 .gender-picker {
@@ -396,20 +476,23 @@ export default {
     .gender-item {
       min-height: 400px;
       width: 100%;
-      background: #a8aaae;
+      background: $gray2;
       position: relative;
       display: flex;
       justify-content: center;
       border-radius: 10px;
       transition: 0.5s;
+      align-items: center;
 
       &:hover {
         transform: scale(1.02);
         cursor: pointer;
       }
-
+      .gender-icon {
+        font-size: 110px;
+      }
       .label {
-        background: #f96424;
+        background: $orange;
         color: white;
         position: absolute;
         bottom: -20px;
@@ -422,6 +505,53 @@ export default {
   }
 }
 
+.parent-tab-pills {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-gap: 0;
+  margin-bottom: 20px;
+
+  .parent-tab-pill {
+    border-color: $purple2;
+    border-style: solid;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    padding: 10px 0;
+    background: $purple3;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s;
+
+    span {
+      font-size: 13px;
+      font-weight: bold;
+      display: inline-block;
+      height: 18px;
+      width: 18px;
+      background: white;
+      color: $purple2 !important;
+      border-radius: 100%;
+      margin-right: 10px;
+    }
+
+    &:nth-of-type(1) {
+      border-left-width: 2px;
+      border-radius: 10px 0 0 10px;
+    }
+    &:nth-of-type(4) {
+      border-right-width: 2px;
+      border-radius: 0 10px 10px 0;
+    }
+    &.active {
+      background: $purple2;
+      color: white;
+    }
+  }
+}
 .tab-pills {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
@@ -429,15 +559,15 @@ export default {
 
   .tab-pill {
     background: white;
-    color: black;
-    border: 2px solid orangered;
+    color: $gray1;
+    border: 2px solid $orange;
     padding: 5px;
     border-radius: 5px;
     font-size: 14px;
     transition: 0.2s;
 
     &.active {
-      background: orangered;
+      background: $orange;
       color: white;
     }
   }
@@ -461,9 +591,26 @@ export default {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
     grid-gap: 20px;
+    max-height: 380px;
+    overflow-y: auto;
+    scrollbar-width: 8px;
+    scrollbar-color: orange blue;
+    padding-right: 10px;
+
+    &::-webkit-scrollbar {
+      width: 11px;
+    }
+    &::-webkit-scrollbar-track {
+      background: #cccccc;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: $purple;
+      border-radius: 6px;
+      border: 3px solid transparent;
+    }
 
     .option-item {
-      background: white;
+      background: $lightBlue;
       cursor: pointer;
       height: 95.19px;
       border: 2px solid black;
@@ -472,7 +619,7 @@ export default {
       border-radius: 5px;
 
       &.active {
-        border: 5px solid purple;
+        border: 5px solid $purple;
       }
 
       img {
@@ -559,32 +706,46 @@ export default {
     background: white;
     border-radius: 4px;
     border: 2px solid black;
-    box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.08);
+    box-shadow: 0 6px 5px 0 rgba(0, 0, 0, 0.09);
     margin-right: 10px;
+    transition: 0.3s;
+
+    &:disabled {
+      color: #aaa;
+      border-color: #aaa;
+      box-shadow: none;
+    }
   }
   .redo {
     padding: 5px 30px;
     background: white;
     border-radius: 4px;
     border: 2px solid black;
-    box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.08);
+    box-shadow: 0 6px 5px 0 rgba(0, 0, 0, 0.09);
     margin-right: 10px;
+    transition: 0.3s;
+
+    &:disabled {
+      color: #aaa;
+      border-color: #aaa;
+      box-shadow: none;
+    }
   }
   .randomise {
     padding: 5px 10px;
     background: white;
     border-radius: 4px;
-    border: 2px solid purple;
-    box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.08);
+    border: 2px solid $purple;
+    box-shadow: 0 6px 5px 0 rgba(0, 0, 0, 0.09);
     margin-right: 10px;
-    color: purple;
+    color: $purple;
   }
 
   .reset {
     border: none;
-    border-bottom: 2px solid red;
+    border-bottom: 2px solid $red;
     background: white;
-    color: red;
+    color: $red;
     font-weight: bold;
     margin-left: 40px;
   }
@@ -595,19 +756,19 @@ export default {
 
     .share {
       padding: 5px 30px;
-      background: #888;
+      background: $gray3;
       border-radius: 4px;
       border: none;
-      box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.08);
+      box-shadow: 0 6px 5px 0 rgba(0, 0, 0, 0.09);
       margin-right: 10px;
       color: white;
     }
     .download {
       padding: 5px 30px;
-      background: purple;
+      background: $purple;
       border-radius: 4px;
       border: none;
-      box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.08);
+      box-shadow: 0 6px 5px 0 rgba(0, 0, 0, 0.09);
       margin-right: 10px;
       color: white;
     }

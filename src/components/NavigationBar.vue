@@ -1,7 +1,8 @@
 <template>
   <nav class="container">
     <img
-      src="https://primeunicornindex.com/wp-content/uploads/2019/09/gitlab-logo-gray-rgb.png"
+      class="my-3"
+      src="http://vps-582f91.stackvps.com/assets/gitlab_logo.png"
       alt=""
     />
   </nav>
