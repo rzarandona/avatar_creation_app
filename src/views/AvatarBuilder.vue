@@ -253,10 +253,10 @@
             <font-awesome-icon icon="redo" />
             Redo
           </button>
-          <button class="randomise">
+          <button @click="randomise" class="randomise">
             <font-awesome-icon icon="random" /> Randomise
           </button>
-          <button class="reset">
+          <button @click="reset" class="reset">
             <font-awesome-icon icon="trash" /> Reset
           </button>
         </div>
@@ -420,12 +420,37 @@ export default {
         hair: this.hair,
       };
       this.avatar_snapshots.unshift(avatar_snapshot);
-      console.log(this.avatar_snapshots);
     },
     applySnapshot(snapshot) {
       let snapshot_keys = Object.keys(snapshot);
       snapshot_keys.forEach((key) => {
         this.setPart(key, snapshot[key], false);
+      });
+    },
+    randomise() {
+      let avatar_keys = Object.keys(this.avatar);
+      avatar_keys.forEach((key) => {
+        let avatar_cursor = this.avatar[key];
+        let random_number = Math.floor(Math.random() * avatar_cursor.length);
+        let avatar_part = avatar_cursor[random_number];
+
+        if (avatar_part == this[key]) {
+          while (avatar_part == this[key]) {
+            let random_number = Math.floor(
+              Math.random() * avatar_cursor.length
+            );
+            avatar_part = avatar_cursor[random_number];
+          }
+        }
+        this.setPart(key, avatar_part, true);
+      });
+    },
+    reset() {
+      let avatar_keys = Object.keys(this.avatar);
+      avatar_keys.forEach((key) => {
+        if (this[key] != this.avatar[key][0]) {
+          this.setPart(key, this.avatar[key][0], true);
+        }
       });
     },
   },
