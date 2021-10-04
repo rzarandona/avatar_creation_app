@@ -22,51 +22,10 @@
           />
 
           <div class="customizer">
-            <div class="parent-options">
-              <div class="parent-tab-pills">
-                <button
-                  @click="setActiveParentPill('face', 'head')"
-                  :class="{
-                    'parent-tab-pill': true,
-                    active: active_parent_pill == 'face',
-                  }"
-                >
-                  <span>1</span>
-                  Face
-                </button>
-                <button
-                  @click="setActiveParentPill('garments', 'shirt')"
-                  :class="{
-                    'parent-tab-pill': true,
-                    active: active_parent_pill == 'garments',
-                  }"
-                >
-                  <span>2</span>
-                  Garments
-                </button>
-                <button
-                  @click="setActiveParentPill('accessories', '')"
-                  :class="{
-                    'parent-tab-pill': true,
-                    active: active_parent_pill == 'accessories',
-                  }"
-                >
-                  <span>3</span>
-                  Accessories
-                </button>
-                <button
-                  @click="setActiveParentPill('background', '')"
-                  :class="{
-                    'parent-tab-pill': true,
-                    active: active_parent_pill == 'background',
-                  }"
-                >
-                  <span>4</span>
-                  Background
-                </button>
-              </div>
-            </div>
-
+            <ParentOptionPills
+              @setActiveParentPill="setActiveParentPill"
+              :active_parent_pill="active_parent_pill"
+            />
             <div class="options">
               <div class="tab-pills">
                 <button
@@ -265,6 +224,7 @@ import FileSaver from "file-saver";
 import Loader from "../components/Loader.vue";
 import GenderPicker from "../components/builder/GenderPicker.vue";
 import Preview from "../components/builder/Preview.vue";
+import ParentOptionPills from "../components/builder/ParentOptionsPills.vue";
 
 export default {
   data() {
@@ -450,6 +410,7 @@ export default {
     Loader,
     GenderPicker,
     Preview,
+    ParentOptionPills,
   },
   created() {
     this.saveCurrentSnapshot();
@@ -484,53 +445,6 @@ $gray3: #8c929d;
   border: none;
 }
 
-.parent-tab-pills {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-gap: 0;
-  margin-bottom: 20px;
-
-  .parent-tab-pill {
-    border-color: $purple2;
-    border-style: solid;
-    border-top-width: 2px;
-    border-bottom-width: 2px;
-    border-left-width: 1px;
-    border-right-width: 1px;
-    padding: 10px 0;
-    background: $purple3;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: 0.3s;
-
-    span {
-      font-size: 13px;
-      font-weight: bold;
-      display: inline-block;
-      height: 18px;
-      width: 18px;
-      background: white;
-      color: $purple2 !important;
-      border-radius: 100%;
-      margin-right: 10px;
-    }
-
-    &:nth-of-type(1) {
-      border-left-width: 2px;
-      border-radius: 10px 0 0 10px;
-    }
-    &:nth-of-type(4) {
-      border-right-width: 2px;
-      border-radius: 0 10px 10px 0;
-    }
-    &.active {
-      background: $purple2;
-      color: white;
-    }
-  }
-}
 .tab-pills {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
