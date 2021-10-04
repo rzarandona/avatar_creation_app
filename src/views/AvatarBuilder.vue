@@ -4,44 +4,22 @@
       <Loader />
     </div>
 
-    <div v-if="!gender.length" class="gender-picker">
-      <h1 class="main-label text-center mb-5">Pick one!</h1>
-      <div class="gender-list">
-        <div @click="setGender('male')" class="gender-item male">
-          <font-awesome-icon class="gender-icon" icon="mars" />
-          <div class="label">Male</div>
-        </div>
-        <div @click="setGender('female')" class="gender-item female">
-          <font-awesome-icon class="gender-icon" icon="venus" />
-          <div class="label">Female</div>
-        </div>
-        <div @click="setGender('non-binary')" class="gender-item non-binary">
-          <font-awesome-icon class="gender-icon" icon="venus-mars" />
-          <div class="label">Non-Binary</div>
-        </div>
-      </div>
-    </div>
+    <GenderPicker @setGender="setGender" :gender="gender" />
 
     <div class="builder-wrapper" v-if="gender.length">
       <h1 class="main-label text-center mb-5">Create Your Avatar!</h1>
       <div class="card">
         <div class="builder-interface">
-          <div class="preview">
-            <small v-if="is_error" class="my-3 text-danger"
-              >Dev warning: Image instance is not found. Please create one for
-              this combination</small
-            >
-            <div class="preview-container" id="preview-container">
-              <img :src="parsedBody" alt="" />
-              <img :src="parsedPants" alt="" />
-              <img :src="parsedShirt" alt="" />
-              <img :src="parsedHead" alt="" />
-              <img :src="parsedEyes" alt="" />
-              <img :src="parsedHair" alt="" />
-              <img :src="parsedNose" alt="" />
-              <img :src="parsedMouth" alt="" />
-            </div>
-          </div>
+          <Preview
+            :parsedBody="parsedBody"
+            :parsedHead="parsedHead"
+            :parsedShirt="parsedShirt"
+            :parsedPants="parsedPants"
+            :parsedEyes="parsedEyes"
+            :parsedNose="parsedNose"
+            :parsedMouth="parsedMouth"
+            :parsedHair="parsedHair"
+          />
 
           <div class="customizer">
             <div class="parent-options">
@@ -285,6 +263,8 @@ import domtoimage from "dom-to-image";
 import FileSaver from "file-saver";
 
 import Loader from "../components/Loader.vue";
+import GenderPicker from "../components/builder/GenderPicker.vue";
+import Preview from "../components/builder/Preview.vue";
 
 export default {
   data() {
@@ -326,9 +306,6 @@ export default {
 
       // Controls loading animation
       is_image_loading: false,
-
-      // Set to true when an image is not found
-      is_error: false,
 
       // Undo/Redo Feature
       avatar_snapshots: [],
@@ -471,6 +448,8 @@ export default {
   components: {
     "font-awesome-icon": FontAwesomeIcon,
     Loader,
+    GenderPicker,
+    Preview,
   },
   created() {
     this.saveCurrentSnapshot();
@@ -503,46 +482,6 @@ $gray3: #8c929d;
   padding: 20px;
   margin: 50px 0;
   border: none;
-}
-
-.gender-picker {
-  .gender-list {
-    max-width: 860px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-gap: 30px;
-
-    .gender-item {
-      min-height: 400px;
-      width: 100%;
-      background: $gray2;
-      position: relative;
-      display: flex;
-      justify-content: center;
-      border-radius: 10px;
-      transition: 0.5s;
-      align-items: center;
-
-      &:hover {
-        transform: scale(1.02);
-        cursor: pointer;
-      }
-      .gender-icon {
-        font-size: 110px;
-      }
-      .label {
-        background: $orange;
-        color: white;
-        position: absolute;
-        bottom: -20px;
-        font-size: 16px;
-        padding: 6px 60px;
-        border-radius: 5px;
-        box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.1);
-      }
-    }
-  }
 }
 
 .parent-tab-pills {
@@ -613,19 +552,6 @@ $gray3: #8c929d;
   }
 }
 
-.preview-container {
-  height: 500px;
-  position: relative;
-  background: #999;
-
-  img {
-    width: 90%;
-    position: absolute;
-    top: 30px;
-    left: 30px;
-  }
-}
-
 .options {
   .option-list {
     display: grid;
@@ -686,15 +612,6 @@ $gray3: #8c929d;
         right: 0;
       }
     }
-  }
-}
-
-@media screen and (max-width: 850px) {
-  .builder-interface {
-    grid-template-columns: 1fr;
-  }
-  .option-list {
-    grid-template-columns: 1fr 1fr !important;
   }
 }
 
