@@ -1,5 +1,9 @@
 <template>
   <div class="container">
+    <div v-if="is_loading">
+      <Loader />
+    </div>
+
     <div v-if="!gender.length" class="gender-picker">
       <h1 class="main-label text-center mb-5">Pick one!</h1>
       <div class="gender-list">
@@ -27,7 +31,7 @@
               >Dev warning: Image instance is not found. Please create one for
               this combination</small
             >
-            <div class="preview-container">
+            <div class="preview-container" id="preview-container">
               <img :src="parsedBody" alt="" />
               <img :src="parsedPants" alt="" />
               <img :src="parsedShirt" alt="" />
@@ -264,7 +268,7 @@
           <button class="share">
             <font-awesome-icon icon="share" /> Share
           </button>
-          <button class="download">
+          <button @click="download" class="download">
             <font-awesome-icon icon="download" /> Download Avatar!
           </button>
         </div>
@@ -277,12 +281,18 @@
 
 <script>
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import domtoimage from "dom-to-image";
+import FileSaver from "file-saver";
+
+import Loader from "../components/Loader.vue";
 
 export default {
   data() {
     return {
       // base_url: "http://localhost/avatar/assets/parts/",
       base_url: "http://vps-582f91.stackvps.com/assets/parts/",
+
+      is_loading: false,
 
       // Flags
       picked_gender: false,
@@ -387,10 +397,6 @@ export default {
     setActivePill(active_pill) {
       this.active_pill = active_pill;
     },
-    downloadInstance() {
-      this.$toastr.defaultPosition = "toast-bottom-left";
-      this.$toastr.e("Feature in development!");
-    },
     setGender(gender) {
       this.gender = gender;
     },
@@ -453,9 +459,18 @@ export default {
         }
       });
     },
+    download() {
+      this.is_loading = true;
+      let node = document.getElementById("preview-container");
+      domtoimage.toBlob(node).then((blob) => {
+        FileSaver.saveAs(blob, "my-avatar.png");
+        this.is_loading = false;
+      });
+    },
   },
   components: {
     "font-awesome-icon": FontAwesomeIcon,
+    Loader,
   },
   created() {
     this.saveCurrentSnapshot();
