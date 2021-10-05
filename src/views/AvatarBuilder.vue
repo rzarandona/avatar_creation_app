@@ -14,12 +14,15 @@
             :parsedBody="parsedBody"
             :parsedHead="parsedHead"
             :parsedEar="parsedEar"
-            :parsedShirt="parsedShirt"
-            :parsedPants="parsedPants"
             :parsedEyes="parsedEyes"
+            :parsedEyebrows="parsedEyebrows"
             :parsedNose="parsedNose"
             :parsedMouth="parsedMouth"
+            :parsedFacialhair="parsedFacialhair"
             :parsedHair="parsedHair"
+            :parsedShirt="parsedShirt"
+            :parsedPants="parsedPants"
+            :parsedShoes="parsedShoes"
           />
 
           <div class="customizer">
@@ -66,6 +69,17 @@
 
                 <button
                   v-if="active_parent_pill == 'face'"
+                  @click="setActivePill('eyebrows')"
+                  :class="{
+                    'tab-pill': true,
+                    active: active_pill == 'eyebrows',
+                  }"
+                >
+                  Eyebrows
+                </button>
+
+                <button
+                  v-if="active_parent_pill == 'face'"
                   @click="setActivePill('eyes')"
                   :class="{ 'tab-pill': true, active: active_pill == 'eyes' }"
                 >
@@ -89,6 +103,16 @@
                   Mouth
                 </button>
                 <button
+                  v-if="active_parent_pill == 'face'"
+                  @click="setActivePill('facialhair')"
+                  :class="{
+                    'tab-pill': true,
+                    active: active_pill == 'facialhair',
+                  }"
+                >
+                  Facial Hair
+                </button>
+                <button
                   v-if="active_parent_pill == 'garments'"
                   @click="setActivePill('shirt')"
                   :class="{
@@ -107,6 +131,16 @@
                   }"
                 >
                   Pants
+                </button>
+                <button
+                  v-if="active_parent_pill == 'garments'"
+                  @click="setActivePill('shoes')"
+                  :class="{
+                    'tab-pill': true,
+                    active: active_pill == 'shoes',
+                  }"
+                >
+                  Shoes
                 </button>
               </div>
 
@@ -165,26 +199,13 @@
               </div>
 
               <div
-                v-if="active_pill == 'shirt'"
-                class="option-list shirt-options my-3"
+                v-if="active_pill == 'eyebrows'"
+                class="option-list eyebrows-options my-3"
               >
                 <div
-                  v-for="item in avatar.shirt"
-                  @click="setPart('shirt', item, true)"
-                  :class="{ 'option-item': true, active: shirt == item }"
-                >
-                  <img :src="getPart(item)" alt="" />
-                </div>
-              </div>
-
-              <div
-                v-if="active_pill == 'pants'"
-                class="option-list pants-options my-3"
-              >
-                <div
-                  v-for="item in avatar.pants"
-                  @click="setPart('pants', item, true)"
-                  :class="{ 'option-item': true, active: pants == item }"
+                  v-for="item in avatar.eyebrows"
+                  @click="setPart('eyebrows', item, true)"
+                  :class="{ 'option-item': true, active: eyebrows == item }"
                 >
                   <img :src="getPart(item)" alt="" />
                 </div>
@@ -224,6 +245,57 @@
                   v-for="item in avatar.mouth"
                   @click="setPart('mouth', item, true)"
                   :class="{ 'option-item': true, active: mouth == item }"
+                >
+                  <img :src="getPart(item)" alt="" />
+                </div>
+              </div>
+
+              <div
+                v-if="active_pill == 'facialhair'"
+                class="option-list facialhair-options my-3"
+              >
+                <div
+                  v-for="item in avatar.facialhair"
+                  @click="setPart('facialhair', item, true)"
+                  :class="{ 'option-item': true, active: facialhair == item }"
+                >
+                  <img :src="getPart(item)" alt="" />
+                </div>
+              </div>
+
+              <div
+                v-if="active_pill == 'shirt'"
+                class="option-list shirt-options my-3"
+              >
+                <div
+                  v-for="item in avatar.shirt"
+                  @click="setPart('shirt', item, true)"
+                  :class="{ 'option-item': true, active: shirt == item }"
+                >
+                  <img :src="getPart(item)" alt="" />
+                </div>
+              </div>
+
+              <div
+                v-if="active_pill == 'pants'"
+                class="option-list pants-options my-3"
+              >
+                <div
+                  v-for="item in avatar.pants"
+                  @click="setPart('pants', item, true)"
+                  :class="{ 'option-item': true, active: pants == item }"
+                >
+                  <img :src="getPart(item)" alt="" />
+                </div>
+              </div>
+              <div
+                v-if="active_pill == 'shoes'"
+                class="option-list shoes-options my-3"
+              >
+                <div
+                  v-for="item in avatar.shoes"
+                  @click="setPart('shoes', item, true)"
+                  :class="{ 'option-item': true, active: shoes == item }"
                 >
                   <img :src="getPart(item)" alt="" />
                 </div>
@@ -325,13 +397,100 @@ export default {
           "ea-9.PNG$tone1",
           "ea-10.PNG$tone1",
         ],
-        shirt: ["st1", "st2"],
-        pants: ["pt1", "pt2"],
+        shirt: ["st-1", "st-2", "st-3", "st-4", "st-5", "st-6"],
+        pants: ["pt-1", "pt-2"],
+        shoes: ["sh-1", "sh-2"],
 
-        eyes: ["ey1", "ey2"],
-        nose: ["ns1", "ns2"],
-        mouth: ["mt1", "mt2"],
-        hair: ["hr1", "hr2", "hr3", "hr4"],
+        eyes: [
+          "ey-1",
+          "ey-2",
+          "ey-3",
+          "ey-4",
+          "ey-5",
+          "ey-6",
+          "ey-7",
+          "ey-8",
+          "ey-9",
+          "ey-10",
+          "ey-11",
+          "ey-12",
+          "ey-13",
+          "ey-14",
+          "ey-15",
+          "ey-16",
+          "ey-17",
+          "ey-18",
+        ],
+        eyebrows: [
+          "eb-1",
+          "eb-2",
+          "eb-3",
+          "eb-4",
+          "eb-5",
+          "eb-6",
+          "eb-7",
+          "eb-8",
+          "eb-9",
+          "eb-10",
+        ],
+        nose: [
+          "ns-1",
+          "ns-2",
+          "ns-3",
+          "ns-4",
+          "ns-5",
+          "ns-6",
+          "ns-7",
+          "ns-8",
+          "ns-9",
+          "ns-10",
+        ],
+        mouth: [
+          "mt-1",
+          "mt-2",
+          "mt-3",
+          "mt-4",
+          "mt-5",
+          "mt-6",
+          "mt-7",
+          "mt-8",
+          "mt-9",
+          "mt-10",
+        ],
+        facialhair: [
+          "fh-1",
+          "fh-2",
+          "fh-3",
+          "fh-4",
+          "fh-5",
+          "fh-6",
+          "fh-7",
+          "fh-8",
+          "fh-9",
+          "fh-10",
+          "fh-11",
+        ],
+
+        hair: [
+          "hr-2",
+          "hr-1",
+          "hr-3",
+          "hr-4",
+          "hr-5",
+          "hr-6",
+          "hr-7",
+          "hr-8",
+          "hr-9",
+          "hr-10",
+          "hr-11",
+          "hr-12",
+          "hr-13",
+          "hr-14",
+          "hr-15",
+          "hr-16",
+          "hr-17",
+          "hr-18",
+        ],
       },
 
       gender: "",
@@ -342,12 +501,16 @@ export default {
       head: "fs-1.PNG$tone1",
       ear: "ea-1.PNG$tone1",
 
-      shirt: "st1",
-      pants: "pt1",
-      eyes: "ey1",
-      nose: "ns1",
-      mouth: "mt1",
-      hair: "hr1",
+      eyes: "ey-1",
+      eyebrows: "eb-1",
+      nose: "ns-1",
+      mouth: "mt-1",
+      facialhair: "fh-1",
+      hair: "hr-2",
+
+      shirt: "st-1",
+      pants: "pt-1",
+      shoes: "sh-1",
 
       // Controls the tab
       active_parent_pill: "face",
@@ -374,20 +537,29 @@ export default {
     parsedEar() {
       return this.base_url + this.ear + ".PNG";
     },
-    parsedShirt() {
-      return this.base_url + this.shirt + ".PNG";
-    },
-    parsedPants() {
-      return this.base_url + this.pants + ".PNG";
-    },
     parsedEyes() {
       return this.base_url + this.eyes + ".PNG";
+    },
+    parsedEyebrows() {
+      return this.base_url + this.eyebrows + ".PNG";
     },
     parsedNose() {
       return this.base_url + this.nose + ".PNG";
     },
     parsedMouth() {
       return this.base_url + this.mouth + ".PNG";
+    },
+    parsedFacialhair() {
+      return this.base_url + this.facialhair + ".PNG";
+    },
+    parsedShirt() {
+      return this.base_url + this.shirt + ".PNG";
+    },
+    parsedPants() {
+      return this.base_url + this.pants + ".PNG";
+    },
+    parsedShoes() {
+      return this.base_url + this.shoes + ".PNG";
     },
   },
   methods: {
@@ -442,11 +614,16 @@ export default {
             body: this.body,
             head: this.head,
             ear: this.ear,
-            shirt: this.shirt,
-            pants: this.pants,
             eyes: this.eyes,
+            eyebrows: this.eyebrows,
             nose: this.nose,
             mouth: this.mouth,
+            facialhair: this.facialhair,
+            hair: this.hair,
+
+            shirt: this.shirt,
+            pants: this.pants,
+            shoes: this.shoes,
             hair: this.hair,
           });
           this.avatar_snapshots = new_avatar_snapshots_reference;
@@ -487,11 +664,16 @@ export default {
         body: this.body,
         head: this.head,
         ear: this.ear,
-        shirt: this.shirt,
-        pants: this.pants,
         eyes: this.eyes,
+        eyebrows: this.eyebrows,
         nose: this.nose,
         mouth: this.mouth,
+        facialhair: this.facialhair,
+        hair: this.hair,
+
+        shirt: this.shirt,
+        pants: this.pants,
+        shoes: this.shoes,
         hair: this.hair,
       };
       this.avatar_snapshots.unshift(avatar_snapshot);
