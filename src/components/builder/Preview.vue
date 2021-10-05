@@ -2,6 +2,7 @@
   <div class="preview">
     <div class="preview-container" id="preview-container">
       <img :src="parsedBody" alt="" />
+      <img :src="parsedEar" alt="" />
       <img :src="parsedPants" alt="" />
       <img :src="parsedShirt" alt="" />
       <img :src="parsedHead" alt="" />
@@ -17,9 +18,10 @@
 export default {
   props: [
     "parsedBody",
+    "parsedHead",
+    "parsedEar",
     "parsedPants",
     "parsedShirt",
-    "parsedHead",
     "parsedEyes",
     "parsedHair",
     "parsedNose",

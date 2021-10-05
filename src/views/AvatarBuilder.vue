@@ -13,6 +13,7 @@
           <Preview
             :parsedBody="parsedBody"
             :parsedHead="parsedHead"
+            :parsedEar="parsedEar"
             :parsedShirt="parsedShirt"
             :parsedPants="parsedPants"
             :parsedEyes="parsedEyes"
@@ -45,6 +46,14 @@
                   :class="{ 'tab-pill': true, active: active_pill == 'head' }"
                 >
                   Head
+                </button>
+
+                <button
+                  v-if="active_parent_pill == 'face'"
+                  @click="setActivePill('ear')"
+                  :class="{ 'tab-pill': true, active: active_pill == 'ear' }"
+                >
+                  Ear
                 </button>
 
                 <button
@@ -124,6 +133,19 @@
                   v-for="item in avatar.head"
                   @click="setPart('head', item, true)"
                   :class="{ 'option-item': true, active: head == item }"
+                >
+                  <img :src="getPart(item)" alt="" />
+                </div>
+              </div>
+
+              <div
+                v-if="active_pill == 'ear'"
+                class="option-list ear-options my-3"
+              >
+                <div
+                  v-for="item in avatar.ear"
+                  @click="setPart('ear', item, true)"
+                  :class="{ 'option-item': true, active: ear == item }"
                 >
                   <img :src="getPart(item)" alt="" />
                 </div>
@@ -291,6 +313,18 @@ export default {
           "fs-9.PNG$tone1",
           "fs-10.PNG$tone1",
         ],
+        ear: [
+          "ea-1.PNG$tone1",
+          "ea-2.PNG$tone1",
+          "ea-3.PNG$tone1",
+          "ea-4.PNG$tone1",
+          "ea-5.PNG$tone1",
+          "ea-6.PNG$tone1",
+          "ea-7.PNG$tone1",
+          "ea-8.PNG$tone1",
+          "ea-9.PNG$tone1",
+          "ea-10.PNG$tone1",
+        ],
         shirt: ["st1", "st2"],
         pants: ["pt1", "pt2"],
 
@@ -306,6 +340,7 @@ export default {
       skin_tone: "tone1",
       body: "bd-1.PNG$tone1",
       head: "fs-1.PNG$tone1",
+      ear: "ea-1.PNG$tone1",
 
       shirt: "st1",
       pants: "pt1",
@@ -336,6 +371,9 @@ export default {
     parsedHead() {
       return this.base_url + this.head + ".PNG";
     },
+    parsedEar() {
+      return this.base_url + this.ear + ".PNG";
+    },
     parsedShirt() {
       return this.base_url + this.shirt + ".PNG";
     },
@@ -364,13 +402,12 @@ export default {
       this.body = new_body_value;
 
       // Update all head values skin_tone
-
-      let counter = 0;
+      let head_counter = 0;
       this.avatar.head.forEach((head) => {
         let new_avatar_head_value =
           head.slice(0, head.search("tone")) + skin_tone;
-        this.$set(this.avatar.head, counter, new_avatar_head_value);
-        counter++;
+        this.$set(this.avatar.head, head_counter, new_avatar_head_value);
+        head_counter++;
       });
 
       // Change head color with the same head type
@@ -378,7 +415,17 @@ export default {
         this.head.slice(0, this.head.search("tone")) + skin_tone;
       this.head = new_head_value;
 
+      // Update all ear values skin_tone
+      let ear_counter = 0;
+      this.avatar.ear.forEach((ear) => {
+        let new_avatar_ear_value = ear.slice(0, ear.search("tone")) + skin_tone;
+        this.$set(this.avatar.ear, ear_counter, new_avatar_ear_value);
+        console.log(new_avatar_ear_value);
+        ear_counter++;
+      });
       // Change ear color with the same ear type
+      let new_ear = this.ear.slice(0, this.ear.search("tone")) + skin_tone;
+      this.ear = new_ear;
     },
     getPart(part) {
       return this.base_url + part + ".PNG";
@@ -395,6 +442,7 @@ export default {
           new_avatar_snapshots_reference.unshift({
             body: this.body,
             head: this.head,
+            ear: this.ear,
             shirt: this.shirt,
             pants: this.pants,
             eyes: this.eyes,
@@ -437,6 +485,7 @@ export default {
       let avatar_snapshot = {
         body: this.body,
         head: this.head,
+        ear: this.ear,
         shirt: this.shirt,
         pants: this.pants,
         eyes: this.eyes,
