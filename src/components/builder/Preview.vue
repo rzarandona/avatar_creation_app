@@ -1,6 +1,7 @@
 <template>
   <div class="preview">
     <div class="preview-container" id="preview-container">
+      <img class="background" :src="parsedBackground" alt="" />
       <img :src="parsedBody" alt="" />
       <img :src="parsedEar" alt="" />
       <img :src="parsedPants" alt="" />
@@ -13,6 +14,7 @@
       <img :src="parsedNose" alt="" />
       <img :src="parsedMouth" alt="" />
       <img :src="parsedFacialhair" alt="" />
+      <img :src="parsedAccessories" alt="" />
     </div>
   </div>
 </template>
@@ -32,6 +34,9 @@ export default {
     "parsedPants",
     "parsedShirt",
     "parsedShoes",
+
+    "parsedAccessories",
+    "parsedBackground",
   ],
 };
 </script>
@@ -47,6 +52,11 @@ export default {
     position: absolute;
     top: 30px;
     left: 30px;
+  }
+  .background {
+    top: 0;
+    left: 0;
+    width: 100%;
   }
 }
 </style>

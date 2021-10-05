@@ -23,6 +23,8 @@
             :parsedShirt="parsedShirt"
             :parsedPants="parsedPants"
             :parsedShoes="parsedShoes"
+            :parsedAccessories="parsedAccessories"
+            :parsedBackground="parsedBackground"
           />
 
           <div class="customizer">
@@ -300,6 +302,32 @@
                   <img :src="getPart(item)" alt="" />
                 </div>
               </div>
+
+              <div
+                v-if="active_parent_pill == 'accessories'"
+                class="option-list accessories-options my-3"
+              >
+                <div
+                  v-for="item in avatar.accessories"
+                  @click="setPart('accessories', item, true)"
+                  :class="{ 'option-item': true, active: accessories == item }"
+                >
+                  <img :src="getPart(item)" alt="" />
+                </div>
+              </div>
+
+              <div
+                v-if="active_parent_pill == 'background'"
+                class="option-list background-options my-3"
+              >
+                <div
+                  v-for="item in avatar.background"
+                  @click="setPart('background', item, true)"
+                  :class="{ 'option-item': true, active: background == item }"
+                >
+                  <img :src="getPart(item)" alt="" />
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -491,6 +519,22 @@ export default {
           "hr-17",
           "hr-18",
         ],
+
+        accessories: [
+          "ac-2",
+          "ac-1",
+          "ac-3",
+          "ac-4",
+          "ac-5",
+          "ac-6",
+          "ac-7",
+          "ac-8",
+          "ac-9",
+          "ac-10",
+          "ac-11",
+          "ac-12",
+        ],
+        background: ["bg-2", "bg-1", "bg-3", "bg-4", "bg-5"],
       },
 
       gender: "",
@@ -511,6 +555,9 @@ export default {
       shirt: "st-1",
       pants: "pt-1",
       shoes: "sh-1",
+
+      accessories: "ac-1",
+      background: "bg-1",
 
       // Controls the tab
       active_parent_pill: "face",
@@ -560,6 +607,13 @@ export default {
     },
     parsedShoes() {
       return this.base_url + this.shoes + ".PNG";
+    },
+
+    parsedAccessories() {
+      return this.base_url + this.accessories + ".PNG";
+    },
+    parsedBackground() {
+      return this.base_url + this.background + ".PNG";
     },
   },
   methods: {
@@ -625,6 +679,9 @@ export default {
             pants: this.pants,
             shoes: this.shoes,
             hair: this.hair,
+
+            accessories: this.accessories,
+            background: this.background,
           });
           this.avatar_snapshots = new_avatar_snapshots_reference;
           this.action_observer = 0;
@@ -675,6 +732,9 @@ export default {
         pants: this.pants,
         shoes: this.shoes,
         hair: this.hair,
+
+        accessories: this.accessories,
+        background: this.background,
       };
       this.avatar_snapshots.unshift(avatar_snapshot);
     },
