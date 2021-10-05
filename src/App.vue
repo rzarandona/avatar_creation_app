@@ -76,7 +76,7 @@ export default {
 
       parts_to_preload: 0,
       preloaded_parts: 0,
-      parts_preload_flag: false,
+      parts_preload_flag: true,
     };
   },
   components: {
@@ -84,49 +84,47 @@ export default {
   },
   methods: {
     preloadParts(urls, allImagesLoadedCallback) {
-      let instance = this;
-      var loadedCounter = 0;
-      var toBeLoadedNumber = urls.length;
-      urls.forEach(function (url) {
-        preloadImage(url, function () {
-          loadedCounter++;
-          instance.preloaded_parts = instance.preloaded_parts + 1;
-          console.log("Preloaded parts: " + instance.preloaded_parts);
-          if (loadedCounter == toBeLoadedNumber) {
-            allImagesLoadedCallback();
-          }
-        });
-      });
-      function preloadImage(url, anImageLoadedCallback) {
-        var img = new Image();
-        img.onload = anImageLoadedCallback;
-        img.src = url;
-      }
+      // let instance = this;
+      // var loadedCounter = 0;
+      // var toBeLoadedNumber = urls.length;
+      // urls.forEach(function (url) {
+      //   preloadImage(url, function () {
+      //     loadedCounter++;
+      //     instance.preloaded_parts = instance.preloaded_parts + 1;
+      //     console.log("Preloaded parts: " + instance.preloaded_parts);
+      //     if (loadedCounter == toBeLoadedNumber) {
+      //       allImagesLoadedCallback();
+      //     }
+      //   });
+      // });
+      // function preloadImage(url, anImageLoadedCallback) {
+      //   var img = new Image();
+      //   img.onload = anImageLoadedCallback;
+      //   img.src = url;
+      // }
     },
   },
   created() {
-    let instances_arr_filtered = [];
-    let parts_arr_filtered = [];
-
-    axios
-      .get("http://vps-582f91.stackvps.com/assets/preload_images.php")
-      .then((res) => {
-        let parts = res.data.parts;
-        let parts_arr = Object.values(parts);
-        this.parts_to_preload = parts_arr.length;
-        parts_arr.forEach((part) => {
-          parts_arr_filtered.push(
-            "http://vps-582f91.stackvps.com/assets/parts/" + part
-          );
-        });
-
-        this.preloadParts(parts_arr_filtered, () => {
-          this.parts_preload_flag = true;
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    // let instances_arr_filtered = [];
+    // let parts_arr_filtered = [];
+    // axios
+    //   .get("http://vps-582f91.stackvps.com/assets/preload_images.php")
+    //   .then((res) => {
+    //     let parts = res.data.parts;
+    //     let parts_arr = Object.values(parts);
+    //     this.parts_to_preload = parts_arr.length;
+    //     parts_arr.forEach((part) => {
+    //       parts_arr_filtered.push(
+    //         "http://vps-582f91.stackvps.com/assets/parts/" + part
+    //       );
+    //     });
+    //     this.preloadParts(parts_arr_filtered, () => {
+    //       this.parts_preload_flag = true;
+    //     });
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   },
 };
 </script>

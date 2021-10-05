@@ -30,11 +30,15 @@
               <div class="tab-pills">
                 <button
                   v-if="active_parent_pill == 'face'"
-                  @click="setActivePill('hair')"
-                  :class="{ 'tab-pill': true, active: active_pill == 'hair' }"
+                  @click="setActivePill('skin_tone')"
+                  :class="{
+                    'tab-pill': true,
+                    active: active_pill == 'skin_tone',
+                  }"
                 >
-                  Hair
+                  Skin Tone
                 </button>
+
                 <button
                   v-if="active_parent_pill == 'face'"
                   @click="setActivePill('head')"
@@ -42,6 +46,15 @@
                 >
                   Head
                 </button>
+
+                <button
+                  v-if="active_parent_pill == 'face'"
+                  @click="setActivePill('hair')"
+                  :class="{ 'tab-pill': true, active: active_pill == 'hair' }"
+                >
+                  Hair
+                </button>
+
                 <button
                   v-if="active_parent_pill == 'face'"
                   @click="setActivePill('eyes')"
@@ -88,6 +101,21 @@
                 </button>
               </div>
 
+              <!-- OPTIONS LIST -->
+
+              <div
+                v-if="active_pill == 'skin_tone'"
+                class="option-list skin_tone-options my-3"
+              >
+                <div
+                  v-for="item in avatar.skin_tone"
+                  @click="setSkinTone(item)"
+                  :class="{ 'option-item': true, active: skin_tone == item }"
+                >
+                  <img :src="getSkinTone(item)" alt="" />
+                </div>
+              </div>
+
               <div
                 v-if="active_pill == 'head'"
                 class="option-list head-options my-3"
@@ -100,6 +128,7 @@
                   <img :src="getPart(item)" alt="" />
                 </div>
               </div>
+
               <div
                 v-if="active_pill == 'hair'"
                 class="option-list hair-options my-3"
@@ -112,6 +141,7 @@
                   <img :src="getPart(item)" alt="" />
                 </div>
               </div>
+
               <div
                 v-if="active_pill == 'shirt'"
                 class="option-list shirt-options my-3"
@@ -239,9 +269,31 @@ export default {
 
       // Avatar parts list
       avatar: {
+        skin_tone: [
+          "tone1",
+          "tone2",
+          "tone3",
+          "tone4",
+          "tone5",
+          "tone6",
+          "tone7",
+          "tone8",
+        ],
+        head: [
+          "fs-1.PNG$tone1",
+          "fs-2.PNG$tone1",
+          "fs-3.PNG$tone1",
+          "fs-4.PNG$tone1",
+          "fs-5.PNG$tone1",
+          "fs-6.PNG$tone1",
+          "fs-7.PNG$tone1",
+          "fs-8.PNG$tone1",
+          "fs-9.PNG$tone1",
+          "fs-10.PNG$tone1",
+        ],
         shirt: ["st1", "st2"],
         pants: ["pt1", "pt2"],
-        head: ["hd1", "hd2"],
+
         eyes: ["ey1", "ey2"],
         nose: ["ns1", "ns2"],
         mouth: ["mt1", "mt2"],
@@ -251,8 +303,10 @@ export default {
       gender: "",
 
       // Avatar set parts
-      body: "bd1",
-      head: "hd1",
+      skin_tone: "tone1",
+      body: "bd-1.PNG$tone1",
+      head: "fs-1.PNG$tone1",
+
       shirt: "st1",
       pants: "pt1",
       eyes: "ey1",
@@ -262,7 +316,7 @@ export default {
 
       // Controls the tab
       active_parent_pill: "face",
-      active_pill: "hair",
+      active_pill: "skin_tone",
 
       // Controls loading animation
       is_image_loading: false,
@@ -299,10 +353,38 @@ export default {
     },
   },
   methods: {
+    getSkinTone(skin_tone) {
+      return this.base_url + "bd-1.PNG$" + skin_tone + ".PNG";
+    },
+    setSkinTone(skin_tone) {
+      this.skin_tone = skin_tone;
+      // Change body color
+      let new_body_value =
+        this.body.slice(0, this.body.search("tone")) + skin_tone;
+      this.body = new_body_value;
+
+      // Update all head values skin_tone
+
+      let counter = 0;
+      this.avatar.head.forEach((head) => {
+        let new_avatar_head_value =
+          head.slice(0, head.search("tone")) + skin_tone;
+        this.$set(this.avatar.head, counter, new_avatar_head_value);
+        counter++;
+      });
+
+      // Change head color with the same head type
+      let new_head_value =
+        this.head.slice(0, this.head.search("tone")) + skin_tone;
+      this.head = new_head_value;
+
+      // Change ear color with the same ear type
+    },
     getPart(part) {
       return this.base_url + part + ".PNG";
     },
     setPart(part, value, persist_as_snapshot) {
+      console.log(value);
       this[part] = value;
       if (persist_as_snapshot) {
         if (this.action_observer != 0) {
