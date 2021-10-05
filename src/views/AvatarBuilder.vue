@@ -431,7 +431,6 @@ export default {
       return this.base_url + part + ".PNG";
     },
     setPart(part, value, persist_as_snapshot) {
-      console.log(value);
       this[part] = value;
       if (persist_as_snapshot) {
         if (this.action_observer != 0) {
@@ -472,6 +471,7 @@ export default {
         this.action_observer = this.action_observer + 1;
         let mapped_snapshot = this.avatar_snapshots[this.action_observer];
         this.applySnapshot(mapped_snapshot);
+        console.log(mapped_snapshot);
       }
     },
     redo() {
@@ -479,6 +479,7 @@ export default {
         this.action_observer = this.action_observer - 1;
         let mapped_snapshot = this.avatar_snapshots[this.action_observer];
         this.applySnapshot(mapped_snapshot);
+        console.log(mapped_snapshot);
       }
     },
     saveCurrentSnapshot() {
@@ -503,29 +504,38 @@ export default {
     },
     randomise() {
       let avatar_keys = Object.keys(this.avatar);
-      avatar_keys.forEach((key) => {
-        let avatar_cursor = this.avatar[key];
-        let random_number = Math.floor(Math.random() * avatar_cursor.length);
-        let avatar_part = avatar_cursor[random_number];
 
-        if (avatar_part == this[key]) {
-          while (avatar_part == this[key]) {
-            let random_number = Math.floor(
-              Math.random() * avatar_cursor.length
-            );
-            avatar_part = avatar_cursor[random_number];
+      avatar_keys.forEach((key) => {
+        // If block is so that skin_tone will not be included in the randomiser
+        if (key != "skin_tone") {
+          let avatar_cursor = this.avatar[key];
+          let random_number = Math.floor(Math.random() * avatar_cursor.length);
+          let avatar_part = avatar_cursor[random_number];
+
+          if (avatar_part == this[key]) {
+            while (avatar_part == this[key]) {
+              let random_number = Math.floor(
+                Math.random() * avatar_cursor.length
+              );
+              avatar_part = avatar_cursor[random_number];
+            }
           }
+          this.setPart(key, avatar_part, true);
         }
-        this.setPart(key, avatar_part, true);
       });
     },
     reset() {
       let avatar_keys = Object.keys(this.avatar);
       avatar_keys.forEach((key) => {
-        if (this[key] != this.avatar[key][0]) {
-          this.setPart(key, this.avatar[key][0], true);
+        // If block is so that skin_tone will not be included in the reset
+        if (key != "skin_tone") {
+          if (this[key] != this.avatar[key][0]) {
+            this.setPart(key, this.avatar[key][0], true);
+          }
         }
       });
+      this.avatar_snapshots = [];
+      this.saveCurrentSnapshot();
     },
     download() {
       this.is_loading = true;
