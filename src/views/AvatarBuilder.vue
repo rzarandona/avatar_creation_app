@@ -364,7 +364,7 @@
       </div>
     </div>
 
-    <!-- <small style="color:#ccc" class="mt-5">Picture set: {{instance}}</small> -->
+    <Share />
   </div>
 </template>
 
@@ -377,6 +377,7 @@ import Loader from "../components/Loader.vue";
 import GenderPicker from "../components/builder/GenderPicker.vue";
 import Preview from "../components/builder/Preview.vue";
 import ParentOptionPills from "../components/builder/ParentOptionsPills.vue";
+import Share from "../components/builder/Share.vue";
 
 export default {
   data() {
@@ -794,6 +795,7 @@ export default {
     GenderPicker,
     Preview,
     ParentOptionPills,
+    Share
   },
   created() {
     this.saveCurrentSnapshot();
