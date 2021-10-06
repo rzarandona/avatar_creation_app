@@ -19,7 +19,8 @@
             :parsedNose="parsedNose"
             :parsedMouth="parsedMouth"
             :parsedFacialhair="parsedFacialhair"
-            :parsedHair="parsedHair"
+            :parsedHairFront="parsedHairFront"
+            :parsedHairBack="parsedHairBack"
             :parsedShirt="parsedShirt"
             :parsedPants="parsedPants"
             :parsedShoes="parsedShoes"
@@ -168,10 +169,13 @@
                 <div
                   v-for="item in avatar.head"
                   @click="setPart('head', item, true)"
-                  :class="{ 'option-item': true, active: head == item }"
-                >
-                  <img :src="getPart(item)" alt="" />
-                </div>
+                  :class="{
+                    'option-head': true,
+                    'option-item': true,
+                    active: head == item,
+                  }"
+                  :style="{ background: 'url(' + getPart(item) + ')' }"
+                ></div>
               </div>
 
               <div
@@ -196,7 +200,7 @@
                   @click="setPart('hair', item, true)"
                   :class="{ 'option-item': true, active: hair == item }"
                 >
-                  <img :src="getPart(item)" alt="" />
+                  <img :src="getHair(item)" alt="" />
                 </div>
               </div>
 
@@ -354,17 +358,15 @@
           </button>
         </div>
         <div class="set-2">
-          <button class="share">
+          <!-- <button class="share">
             <font-awesome-icon icon="share" /> Share
-          </button>
+          </button> -->
           <button @click="download" class="download">
             <font-awesome-icon icon="download" /> Download Avatar!
           </button>
         </div>
       </div>
     </div>
-
-    <Share />
   </div>
 </template>
 
@@ -377,7 +379,6 @@ import Loader from "../components/Loader.vue";
 import GenderPicker from "../components/builder/GenderPicker.vue";
 import Preview from "../components/builder/Preview.vue";
 import ParentOptionPills from "../components/builder/ParentOptionsPills.vue";
-import Share from "../components/builder/Share.vue";
 
 export default {
   data() {
@@ -501,24 +502,66 @@ export default {
         ],
 
         hair: [
-          "hr-2",
-          "hr-1",
-          "hr-3",
-          "hr-4",
-          "hr-5",
-          "hr-6",
-          "hr-7",
-          "hr-8",
-          "hr-9",
-          "hr-10",
-          "hr-11",
-          "hr-12",
-          "hr-13",
-          "hr-14",
-          "hr-15",
-          "hr-16",
-          "hr-17",
-          "hr-18",
+          "bk-s1",
+          "bk-s2",
+          "bk-s3",
+          "bk-s4",
+          "bk-s5",
+          "bk-s6",
+          "bk-s7",
+          "bk-s8",
+          "bk-s9",
+          "bk-s10",
+          "lb-s1",
+          "lb-s2",
+          "lb-s3",
+          "lb-s4",
+          "lb-s5",
+          "lb-s6",
+          "lb-s7",
+          "lb-s8",
+          "lb-s9",
+          "lb-s10",
+          "db-s1",
+          "db-s2",
+          "db-s3",
+          "db-s4",
+          "db-s5",
+          "db-s6",
+          "db-s7",
+          "db-s8",
+          "db-s9",
+          "db-s10",
+          "bl-s1",
+          "bl-s2",
+          "bl-s3",
+          "bl-s4",
+          "bl-s5",
+          "bl-s6",
+          "bl-s7",
+          "bl-s8",
+          "bl-s9",
+          "bl-s10",
+          "rh-s1",
+          "rh-s2",
+          "rh-s3",
+          "rh-s4",
+          "rh-s5",
+          "rh-s6",
+          "rh-s7",
+          "rh-s8",
+          "rh-s9",
+          "rh-s10",
+          "gr-s1",
+          "gr-s2",
+          "gr-s3",
+          "gr-s4",
+          "gr-s5",
+          "gr-s6",
+          "gr-s7",
+          "gr-s8",
+          "gr-s9",
+          "gr-s10",
         ],
 
         accessories: [
@@ -551,7 +594,10 @@ export default {
       nose: "ns-1",
       mouth: "mt-1",
       facialhair: "fh-1",
-      hair: "hr-2",
+
+      hair: "bl-s1",
+      hairFront: "bl-s1-front",
+      hairBack: "bl-s1-back",
 
       shirt: "st-1",
       pants: "pt-1",
@@ -576,8 +622,11 @@ export default {
     parsedBody() {
       return this.base_url + this.body + ".PNG";
     },
-    parsedHair() {
-      return this.base_url + this.hair + ".PNG";
+    parsedHairFront() {
+      return this.base_url + this.hairFront + ".PNG";
+    },
+    parsedHairBack() {
+      return this.base_url + this.hairBack + ".PNG";
     },
     parsedHead() {
       return this.base_url + this.head + ".PNG";
@@ -657,8 +706,15 @@ export default {
     getPart(part) {
       return this.base_url + part + ".PNG";
     },
+    getHair(hair_code) {
+      return this.base_url + hair_code + "-front.PNG";
+    },
     setPart(part, value, persist_as_snapshot) {
       this[part] = value;
+      if (part == "hair") {
+        this.hairFront = value + "-front";
+        this.hairBack = value + "-back";
+      }
       if (persist_as_snapshot) {
         if (this.action_observer != 0) {
           let avatar_snapshots_reference = [...this.avatar_snapshots];
@@ -795,7 +851,6 @@ export default {
     GenderPicker,
     Preview,
     ParentOptionPills,
-    Share
   },
   created() {
     this.saveCurrentSnapshot();
@@ -856,7 +911,7 @@ $gray3: #8c929d;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
     grid-gap: 20px;
-    max-height: 380px;
+    max-height: 336px;
     overflow-y: auto;
     scrollbar-width: 8px;
     scrollbar-color: orange blue;
@@ -910,6 +965,11 @@ $gray3: #8c929d;
         top: 0;
         right: 0;
       }
+    }
+
+    .option-head {
+      background-size: 270% !important;
+      background-position: -70px 225px !important;
     }
   }
 }

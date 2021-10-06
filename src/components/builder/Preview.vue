@@ -2,6 +2,7 @@
   <div class="preview">
     <div class="preview-container" id="preview-container">
       <img class="background" :src="parsedBackground" alt="" />
+      <img :src="parsedHairBack" alt="" />
       <img :src="parsedBody" alt="" />
       <img :src="parsedEar" alt="" />
       <img :src="parsedPants" alt="" />
@@ -10,9 +11,9 @@
       <img :src="parsedHead" alt="" />
       <img :src="parsedEyes" alt="" />
       <img :src="parsedEyebrows" alt="" />
-      <img :src="parsedHair" alt="" />
       <img :src="parsedNose" alt="" />
       <img :src="parsedMouth" alt="" />
+      <img :src="parsedHairFront" alt="" />
       <img :src="parsedFacialhair" alt="" />
       <img :src="parsedAccessories" alt="" />
     </div>
@@ -27,7 +28,8 @@ export default {
     "parsedEar",
     "parsedEyes",
     "parsedEyebrows",
-    "parsedHair",
+    "parsedHairFront",
+    "parsedHairBack",
     "parsedNose",
     "parsedMouth",
     "parsedFacialhair",
