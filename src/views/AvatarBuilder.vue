@@ -24,6 +24,7 @@
             :parsedShirt="parsedShirt"
             :parsedPants="parsedPants"
             :parsedShoes="parsedShoes"
+            :parsedHat="parsedHat"
             :parsedAccessories="parsedAccessories"
             :parsedBackground="parsedBackground"
           />
@@ -106,7 +107,10 @@
                   Mouth
                 </button>
                 <button
-                  v-if="active_parent_pill == 'face'"
+                  v-if="
+                    active_parent_pill == 'face' &&
+                    (gender == 'male' || gender == 'non-binary')
+                  "
                   @click="setActivePill('facialhair')"
                   :class="{
                     'tab-pill': true,
@@ -123,7 +127,7 @@
                     active: active_pill == 'shirt',
                   }"
                 >
-                  Shirt
+                  Top
                 </button>
                 <button
                   v-if="active_parent_pill == 'garments'"
@@ -133,7 +137,7 @@
                     active: active_pill == 'pants',
                   }"
                 >
-                  Pants
+                  Bottom
                 </button>
                 <button
                   v-if="active_parent_pill == 'garments'"
@@ -144,6 +148,17 @@
                   }"
                 >
                   Shoes
+                </button>
+
+                <button
+                  v-if="active_parent_pill == 'garments'"
+                  @click="setActivePill('hat')"
+                  :class="{
+                    'tab-pill': true,
+                    active: active_pill == 'hat',
+                  }"
+                >
+                  Hat
                 </button>
               </div>
 
@@ -274,7 +289,16 @@
                 class="option-list shirt-options my-3"
               >
                 <div
-                  v-for="item in avatar.shirt"
+                  v-if="gender == 'male' || gender == 'non-binary'"
+                  v-for="item in avatar.shirt.male"
+                  @click="setPart('shirt', item, true)"
+                  :class="{ 'option-item': true, active: shirt == item }"
+                >
+                  <img :src="getPart(item)" alt="" />
+                </div>
+                <div
+                  v-if="gender == 'female' || gender == 'non-binary'"
+                  v-for="item in avatar.shirt.female"
                   @click="setPart('shirt', item, true)"
                   :class="{ 'option-item': true, active: shirt == item }"
                 >
@@ -287,7 +311,16 @@
                 class="option-list pants-options my-3"
               >
                 <div
-                  v-for="item in avatar.pants"
+                  v-if="gender == 'male' || gender == 'non-binary'"
+                  v-for="item in avatar.pants.male"
+                  @click="setPart('pants', item, true)"
+                  :class="{ 'option-item': true, active: pants == item }"
+                >
+                  <img :src="getPart(item)" alt="" />
+                </div>
+                <div
+                  v-if="gender == 'female' || gender == 'non-binary'"
+                  v-for="item in avatar.pants.female"
                   @click="setPart('pants', item, true)"
                   :class="{ 'option-item': true, active: pants == item }"
                 >
@@ -302,6 +335,19 @@
                   v-for="item in avatar.shoes"
                   @click="setPart('shoes', item, true)"
                   :class="{ 'option-item': true, active: shoes == item }"
+                >
+                  <img :src="getPart(item)" alt="" />
+                </div>
+              </div>
+
+              <div
+                v-if="active_pill == 'hat'"
+                class="option-list hat-options my-3"
+              >
+                <div
+                  v-for="item in avatar.hat"
+                  @click="setPart('hat', item, true)"
+                  :class="{ 'option-item': true, active: hat == item }"
                 >
                   <img :src="getPart(item)" alt="" />
                 </div>
@@ -427,9 +473,140 @@ export default {
           "ea-9.PNG$tone1",
           "ea-10.PNG$tone1",
         ],
-        shirt: ["st-1", "st-2", "st-3", "st-4", "st-5", "st-6"],
-        pants: ["pt-1", "pt-2"],
-        shoes: ["sh-1", "sh-2"],
+        shirt: {
+          male: [
+            "ml-sh-1",
+            "ml-sh-2",
+            "ml-sh-3",
+            "ml-sh-4",
+            "ml-sh-5",
+            "ml-sh-6",
+            "ml-sh-7",
+            "ml-sh-8",
+            "ml-sh-9",
+            "ml-sh-10",
+            "ml-sh-11",
+            "ml-sh-12",
+            "ml-sh-13",
+            "ml-sh-14",
+            "ml-sh-15",
+            "ml-sh-16",
+            "ml-sh-17",
+            "ml-sh-18",
+            "ml-sh-19",
+            "ml-sh-20",
+            "ml-sh-21",
+            "ml-sh-22",
+            "ml-sh-23",
+            "ml-sh-24",
+            "ml-sh-25",
+          ],
+          female: [
+            "fm-sh-1",
+            "fm-sh-2",
+            "fm-sh-3",
+            "fm-sh-4",
+            "fm-sh-5",
+            "fm-sh-6",
+            "fm-sh-7",
+            "fm-sh-8",
+            "fm-sh-9",
+            "fm-sh-10",
+            "fm-sh-11",
+            "fm-sh-12",
+            "fm-sh-13",
+            "fm-sh-14",
+            "fm-sh-15",
+            "fm-sh-16",
+            "fm-sh-17",
+            "fm-sh-18",
+            "fm-sh-19",
+            "fm-sh-20",
+          ],
+        },
+        pants: {
+          male: [
+            "ml-pt-1",
+            "ml-pt-2",
+            "ml-pt-3",
+            "ml-pt-4",
+            "ml-pt-5",
+            "ml-pt-6",
+          ],
+          female: [
+            "fm-pt-1",
+            "fm-pt-2",
+            "fm-pt-3",
+            "fm-pt-4",
+            "fm-pt-5",
+            "fm-pt-6",
+            "fm-pt-7",
+            "fm-pt-8",
+            "fm-pt-9",
+            "fm-pt-10",
+            "fm-pt-11",
+            "fm-pt-12",
+            "fm-pt-13",
+            "fm-pt-14",
+            "fm-pt-15",
+          ],
+        },
+        shoes: [
+          "sh-1",
+          "sh-2",
+          "sh-3",
+          "sh-4",
+          "sh-5",
+          "sh-6",
+          "sh-7",
+          "sh-8",
+          "sh-9",
+          "sh-10",
+          "sh-11",
+          "sh-12",
+          "sh-13",
+          "sh-14",
+          "sh-15",
+          "sh-16",
+          "sh-17",
+          "sh-18",
+          "sh-19",
+          "sh-20",
+          "sh-21",
+          "sh-22",
+          "sh-23",
+          "sh-24",
+          "sh-25",
+          "sh-26",
+          "sh-27",
+          "sh-28",
+          "sh-29",
+          "sh-30",
+          "sh-31",
+          "sh-32",
+          "sh-33",
+          "sh-34",
+          "sh-35",
+          "sh-36",
+          "sh-37",
+          "sh-38",
+          "sh-39",
+          "sh-40",
+          "sh-41",
+          "sh-42",
+        ],
+        hat: [
+          "ht-1",
+          "ht-2",
+          "ht-3",
+          "ht-4",
+          "ht-5",
+          "ht-6",
+          "ht-7",
+          "ht-8",
+          "ht-9",
+          "ht-10",
+        ],
 
         eyes: [
           "ey-1",
@@ -450,6 +627,150 @@ export default {
           "ey-16",
           "ey-17",
           "ey-18",
+          "ey-19",
+          "ey-20",
+          "ey-21",
+          "ey-22",
+          "ey-23",
+          "ey-24",
+          "ey-25",
+          "ey-26",
+          "ey-27",
+          "ey-28",
+          "ey-29",
+          "ey-30",
+          "ey-31",
+          "ey-32",
+          "ey-33",
+          "ey-34",
+          "ey-35",
+          "ey-36",
+          "ey-37",
+          "ey-38",
+          "ey-39",
+          "ey-40",
+          "ey-41",
+          "ey-42",
+          "ey-43",
+          "ey-44",
+          "ey-45",
+          "ey-46",
+          "ey-47",
+          "ey-48",
+          "ey-49",
+          "ey-50",
+          "ey-51",
+          "ey-52",
+          "ey-53",
+          "ey-54",
+          "ey-55",
+          "ey-56",
+          "ey-57",
+          "ey-58",
+          "ey-59",
+          "ey-60",
+          "ey-61",
+          "ey-62",
+          "ey-63",
+          "ey-64",
+          "ey-65",
+          "ey-66",
+          "ey-67",
+          "ey-68",
+          "ey-69",
+          "ey-70",
+          "ey-71",
+          "ey-72",
+          "ey-73",
+          "ey-74",
+          "ey-75",
+          "ey-76",
+          "ey-77",
+          "ey-78",
+          "ey-79",
+          "ey-80",
+          "ey-81",
+          "ey-82",
+          "ey-83",
+          "ey-84",
+          "ey-85",
+          "ey-86",
+          "ey-87",
+          "ey-88",
+          "ey-89",
+          "ey-90",
+          "ey-91",
+          "ey-92",
+          "ey-93",
+          "ey-94",
+          "ey-95",
+          "ey-96",
+          "ey-97",
+          "ey-98",
+          "ey-99",
+          "ey-100",
+          "ey-101",
+          "ey-102",
+          "ey-103",
+          "ey-104",
+          "ey-105",
+          "ey-106",
+          "ey-107",
+          "ey-108",
+          "ey-109",
+          "ey-110",
+          "ey-111",
+          "ey-112",
+          "ey-113",
+          "ey-114",
+          "ey-115",
+          "ey-116",
+          "ey-117",
+          "ey-118",
+          "ey-119",
+          "ey-120",
+          "ey-121",
+          "ey-122",
+          "ey-123",
+          "ey-124",
+          "ey-125",
+          "ey-126",
+          "ey-127",
+          "ey-128",
+          "ey-129",
+          "ey-130",
+          "ey-131",
+          "ey-132",
+          "ey-133",
+          "ey-134",
+          "ey-135",
+          "ey-136",
+          "ey-137",
+          "ey-138",
+          "ey-139",
+          "ey-140",
+          "ey-141",
+          "ey-142",
+          "ey-143",
+          "ey-144",
+          "ey-145",
+          "ey-146",
+          "ey-147",
+          "ey-148",
+          "ey-149",
+          "ey-150",
+          "ey-151",
+          "ey-152",
+          "ey-153",
+          "ey-154",
+          "ey-155",
+          "ey-156",
+          "ey-157",
+          "ey-158",
+          "ey-159",
+          "ey-160",
+          "ey-161",
+          "ey-162",
         ],
         eyebrows: [
           "eb-1",
@@ -462,6 +783,26 @@ export default {
           "eb-8",
           "eb-9",
           "eb-10",
+          "eb-11",
+          "eb-12",
+          "eb-13",
+          "eb-14",
+          "eb-15",
+          "eb-16",
+          "eb-17",
+          "eb-18",
+          "eb-19",
+          "eb-20",
+          "eb-21",
+          "eb-22",
+          "eb-23",
+          "eb-24",
+          "eb-25",
+          "eb-26",
+          "eb-27",
+          "eb-28",
+          "eb-29",
+          "eb-30",
         ],
         nose: [
           "ns-1",
@@ -474,6 +815,27 @@ export default {
           "ns-8",
           "ns-9",
           "ns-10",
+          "ns-11",
+          "ns-12",
+          "ns-13",
+          "ns-14",
+          "ns-15",
+          "ns-16",
+          "ns-17",
+          "ns-18",
+          "ns-19",
+          "ns-20",
+          "ns-21",
+          "ns-22",
+          "ns-23",
+          "ns-24",
+          "ns-25",
+          "ns-26",
+          "ns-27",
+          "ns-28",
+          "ns-29",
+          "ns-30",
+          "ns-31",
         ],
         mouth: [
           "mt-1",
@@ -488,6 +850,7 @@ export default {
           "mt-10",
         ],
         facialhair: [
+          "fh-0",
           "fh-1",
           "fh-2",
           "fh-3",
@@ -499,6 +862,55 @@ export default {
           "fh-9",
           "fh-10",
           "fh-11",
+          "fh-12",
+          "fh-13",
+          "fh-14",
+          "fh-15",
+          "fh-16",
+          "fh-17",
+          "fh-18",
+          "fh-19",
+          "fh-20",
+          "fh-21",
+          "fh-22",
+          "fh-23",
+          "fh-24",
+          "fh-25",
+          "fh-26",
+          "fh-27",
+          "fh-28",
+          "fh-29",
+          "fh-30",
+          "fh-31",
+          "fh-32",
+          "fh-33",
+          "fh-34",
+          "fh-35",
+          "fh-36",
+          "fh-37",
+          "fh-38",
+          "fh-39",
+          "fh-40",
+          "fh-41",
+          "fh-42",
+          "fh-43",
+          "fh-44",
+          "fh-45",
+          "fh-46",
+          "fh-47",
+          "fh-48",
+          "fh-49",
+          "fh-50",
+          "fh-51",
+          "fh-52",
+          "fh-53",
+          "fh-54",
+          "fh-55",
+          "fh-56",
+          "fh-57",
+          "fh-58",
+          "fh-59",
+          "fh-60",
         ],
 
         hair: [
@@ -602,6 +1014,7 @@ export default {
       shirt: "st-1",
       pants: "pt-1",
       shoes: "sh-1",
+      hat: "ht-1",
 
       accessories: "ac-1",
       background: "bg-1",
@@ -657,6 +1070,9 @@ export default {
     },
     parsedShoes() {
       return this.base_url + this.shoes + ".PNG";
+    },
+    parsedHat() {
+      return this.base_url + this.hat + ".PNG";
     },
 
     parsedAccessories() {
@@ -735,6 +1151,7 @@ export default {
             shirt: this.shirt,
             pants: this.pants,
             shoes: this.shoes,
+            hat: this.hat,
             hair: this.hair,
 
             accessories: this.accessories,
@@ -788,6 +1205,7 @@ export default {
         shirt: this.shirt,
         pants: this.pants,
         shoes: this.shoes,
+        hat: this.hat,
         hair: this.hair,
 
         accessories: this.accessories,
@@ -808,6 +1226,19 @@ export default {
         // If block is so that skin_tone will not be included in the randomiser
         if (key != "skin_tone") {
           let avatar_cursor = this.avatar[key];
+
+          if (key == "shirt" || key == "pants") {
+            let gender = this.gender;
+            if (gender != "non-binary") {
+              avatar_cursor = this.avatar[key][gender];
+            } else {
+              avatar_cursor = [
+                ...this.avatar[key].male,
+                ...this.avatar[key].female,
+              ];
+            }
+          }
+
           let random_number = Math.floor(Math.random() * avatar_cursor.length);
           let avatar_part = avatar_cursor[random_number];
 
@@ -818,6 +1249,10 @@ export default {
               );
               avatar_part = avatar_cursor[random_number];
             }
+          }
+
+          if (key == "facialhair" && this.gender == "female") {
+            avatar_part = avatar_cursor[0];
           }
           this.setPart(key, avatar_part, true);
         }

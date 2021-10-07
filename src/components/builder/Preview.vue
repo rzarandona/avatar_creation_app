@@ -5,15 +5,18 @@
       <img :src="parsedHairBack" alt="" />
       <img :src="parsedBody" alt="" />
       <img :src="parsedEar" alt="" />
-      <img :src="parsedPants" alt="" />
+
       <img :src="parsedShoes" alt="" />
+      <img :src="parsedPants" alt="" />
       <img :src="parsedShirt" alt="" />
       <img :src="parsedHead" alt="" />
+
       <img :src="parsedEyes" alt="" />
       <img :src="parsedEyebrows" alt="" />
       <img :src="parsedNose" alt="" />
       <img :src="parsedMouth" alt="" />
       <img :src="parsedHairFront" alt="" />
+      <img :src="parsedHat" alt="" />
       <img :src="parsedFacialhair" alt="" />
       <img :src="parsedAccessories" alt="" />
     </div>
@@ -36,6 +39,7 @@ export default {
     "parsedPants",
     "parsedShirt",
     "parsedShoes",
+    "parsedHat",
 
     "parsedAccessories",
     "parsedBackground",
