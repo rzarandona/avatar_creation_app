@@ -22,6 +22,7 @@
             :parsedHairFront="parsedHairFront"
             :parsedHairBack="parsedHairBack"
             :parsedShirt="parsedShirt"
+            :parsedJacket="parsedJacket"
             :parsedPants="parsedPants"
             :parsedShoes="parsedShoes"
             :parsedHat="parsedHat"
@@ -160,6 +161,16 @@
                 >
                   Hat
                 </button>
+                <button
+                  v-if="active_parent_pill == 'garments'"
+                  @click="setActivePill('jacket')"
+                  :class="{
+                    'tab-pill': true,
+                    active: active_pill == 'jacket',
+                  }"
+                >
+                  Jacket
+                </button>
               </div>
 
               <!-- OPTIONS LIST -->
@@ -171,10 +182,13 @@
                 <div
                   v-for="item in avatar.skin_tone"
                   @click="setSkinTone(item)"
-                  :class="{ 'option-item': true, active: skin_tone == item }"
-                >
-                  <img :src="getSkinTone(item)" alt="" />
-                </div>
+                  :class="{
+                    'option-skintone': true,
+                    'option-item': true,
+                    active: skin_tone == item,
+                  }"
+                  :style="{ background: 'url(' + getSkinTone(item) + ')' }"
+                ></div>
               </div>
 
               <div
@@ -200,10 +214,13 @@
                 <div
                   v-for="item in avatar.ear"
                   @click="setPart('ear', item, true)"
-                  :class="{ 'option-item': true, active: ear == item }"
-                >
-                  <img :src="getPart(item)" alt="" />
-                </div>
+                  :class="{
+                    'option-ear': true,
+                    'option-item': true,
+                    active: ear == item,
+                  }"
+                  :style="{ background: 'url(' + getPart(item) + ')' }"
+                ></div>
               </div>
 
               <div
@@ -213,10 +230,13 @@
                 <div
                   v-for="item in avatar.hair"
                   @click="setPart('hair', item, true)"
-                  :class="{ 'option-item': true, active: hair == item }"
-                >
-                  <img :src="getHair(item)" alt="" />
-                </div>
+                  :class="{
+                    'option-hair': true,
+                    'option-item': true,
+                    active: hair == item,
+                  }"
+                  :style="{ background: 'url(' + getHair(item) + ')' }"
+                ></div>
               </div>
 
               <div
@@ -226,10 +246,13 @@
                 <div
                   v-for="item in avatar.eyebrows"
                   @click="setPart('eyebrows', item, true)"
-                  :class="{ 'option-item': true, active: eyebrows == item }"
-                >
-                  <img :src="getPart(item)" alt="" />
-                </div>
+                  :class="{
+                    'option-eyebrows': true,
+                    'option-item': true,
+                    active: eyebrows == item,
+                  }"
+                  :style="{ background: 'url(' + getPart(item) + ')' }"
+                ></div>
               </div>
 
               <div
@@ -239,10 +262,13 @@
                 <div
                   v-for="item in avatar.eyes"
                   @click="setPart('eyes', item, true)"
-                  :class="{ 'option-item': true, active: eyes == item }"
-                >
-                  <img :src="getPart(item)" alt="" />
-                </div>
+                  :class="{
+                    'option-eyes': true,
+                    'option-item': true,
+                    active: eyes == item,
+                  }"
+                  :style="{ background: 'url(' + getPart(item) + ')' }"
+                ></div>
               </div>
 
               <div
@@ -252,10 +278,13 @@
                 <div
                   v-for="item in avatar.nose"
                   @click="setPart('nose', item, true)"
-                  :class="{ 'option-item': true, active: nose == item }"
-                >
-                  <img :src="getPart(item)" alt="" />
-                </div>
+                  :class="{
+                    'option-nose': true,
+                    'option-item': true,
+                    active: nose == item,
+                  }"
+                  :style="{ background: 'url(' + getPart(item) + ')' }"
+                ></div>
               </div>
 
               <div
@@ -265,10 +294,13 @@
                 <div
                   v-for="item in avatar.mouth"
                   @click="setPart('mouth', item, true)"
-                  :class="{ 'option-item': true, active: mouth == item }"
-                >
-                  <img :src="getPart(item)" alt="" />
-                </div>
+                  :class="{
+                    'option-mouth': true,
+                    'option-item': true,
+                    active: mouth == item,
+                  }"
+                  :style="{ background: 'url(' + getPart(item) + ')' }"
+                ></div>
               </div>
 
               <div
@@ -278,7 +310,12 @@
                 <div
                   v-for="item in avatar.facialhair"
                   @click="setPart('facialhair', item, true)"
-                  :class="{ 'option-item': true, active: facialhair == item }"
+                  :class="{
+                    'option-facialhair': true,
+                    'option-item': true,
+                    active: facialhair == item,
+                  }"
+                  :style="{ background: 'url(' + getPart(item) + ')' }"
                 >
                   <img :src="getPart(item)" alt="" />
                 </div>
@@ -292,18 +329,24 @@
                   v-if="gender == 'male' || gender == 'non-binary'"
                   v-for="item in avatar.shirt.male"
                   @click="setPart('shirt', item, true)"
-                  :class="{ 'option-item': true, active: shirt == item }"
-                >
-                  <img :src="getPart(item)" alt="" />
-                </div>
+                  :class="{
+                    'option-shirt': true,
+                    'option-item': true,
+                    active: shirt == item,
+                  }"
+                  :style="{ background: 'url(' + getPart(item) + ')' }"
+                ></div>
                 <div
                   v-if="gender == 'female' || gender == 'non-binary'"
                   v-for="item in avatar.shirt.female"
                   @click="setPart('shirt', item, true)"
-                  :class="{ 'option-item': true, active: shirt == item }"
-                >
-                  <img :src="getPart(item)" alt="" />
-                </div>
+                  :class="{
+                    'option-shirt': true,
+                    'option-item': true,
+                    active: shirt == item,
+                  }"
+                  :style="{ background: 'url(' + getPart(item) + ')' }"
+                ></div>
               </div>
 
               <div
@@ -314,18 +357,24 @@
                   v-if="gender == 'male' || gender == 'non-binary'"
                   v-for="item in avatar.pants.male"
                   @click="setPart('pants', item, true)"
-                  :class="{ 'option-item': true, active: pants == item }"
-                >
-                  <img :src="getPart(item)" alt="" />
-                </div>
+                  :class="{
+                    'option-pants': true,
+                    'option-item': true,
+                    active: pants == item,
+                  }"
+                  :style="{ background: 'url(' + getPart(item) + ')' }"
+                ></div>
                 <div
                   v-if="gender == 'female' || gender == 'non-binary'"
                   v-for="item in avatar.pants.female"
                   @click="setPart('pants', item, true)"
-                  :class="{ 'option-item': true, active: pants == item }"
-                >
-                  <img :src="getPart(item)" alt="" />
-                </div>
+                  :class="{
+                    'option-pants': true,
+                    'option-item': true,
+                    active: pants == item,
+                  }"
+                  :style="{ background: 'url(' + getPart(item) + ')' }"
+                ></div>
               </div>
               <div
                 v-if="active_pill == 'shoes'"
@@ -334,10 +383,13 @@
                 <div
                   v-for="item in avatar.shoes"
                   @click="setPart('shoes', item, true)"
-                  :class="{ 'option-item': true, active: shoes == item }"
-                >
-                  <img :src="getPart(item)" alt="" />
-                </div>
+                  :class="{
+                    'option-shoes': true,
+                    'option-item': true,
+                    active: shoes == item,
+                  }"
+                  :style="{ background: 'url(' + getPart(item) + ')' }"
+                ></div>
               </div>
 
               <div
@@ -347,10 +399,41 @@
                 <div
                   v-for="item in avatar.hat"
                   @click="setPart('hat', item, true)"
-                  :class="{ 'option-item': true, active: hat == item }"
-                >
-                  <img :src="getPart(item)" alt="" />
-                </div>
+                  :class="{
+                    'option-hat': true,
+                    'option-item': true,
+                    active: hat == item,
+                  }"
+                  :style="{ background: 'url(' + getPart(item) + ')' }"
+                ></div>
+              </div>
+
+              <div
+                v-if="active_pill == 'jacket'"
+                class="option-list jacket-options my-3"
+              >
+                <div
+                  v-if="gender == 'male' || gender == 'non-binary'"
+                  v-for="item in avatar.jacket.male"
+                  @click="setPart('jacket', item, true)"
+                  :class="{
+                    'option-jacket': true,
+                    'option-item': true,
+                    active: jacket == item,
+                  }"
+                  :style="{ background: 'url(' + getPart(item) + ')' }"
+                ></div>
+                <div
+                  v-if="gender == 'female' || gender == 'non-binary'"
+                  v-for="item in avatar.jacket.female"
+                  @click="setPart('jacket', item, true)"
+                  :class="{
+                    'option-jacket': true,
+                    'option-item': true,
+                    active: jacket == item,
+                  }"
+                  :style="{ background: 'url(' + getPart(item) + ')' }"
+                ></div>
               </div>
 
               <div
@@ -360,10 +443,13 @@
                 <div
                   v-for="item in avatar.accessories"
                   @click="setPart('accessories', item, true)"
-                  :class="{ 'option-item': true, active: accessories == item }"
-                >
-                  <img :src="getPart(item)" alt="" />
-                </div>
+                  :class="{
+                    'option-accessories': true,
+                    'option-item': true,
+                    active: accessories == item,
+                  }"
+                  :style="{ background: 'url(' + getPart(item) + ')' }"
+                ></div>
               </div>
 
               <div
@@ -523,6 +609,10 @@ export default {
             "fm-sh-19",
             "fm-sh-20",
           ],
+        },
+        jacket: {
+          male: ["ml-jk-1", "ml-jk-2", "ml-jk-3", "ml-jk-4"],
+          female: ["fm-jk-1", "fm-jk-2"],
         },
         pants: {
           male: [
@@ -1001,20 +1091,21 @@ export default {
       head: "fs-1.PNG$tone1",
       ear: "ea-1.PNG$tone1",
 
-      eyes: "ey-1",
-      eyebrows: "eb-1",
-      nose: "ns-1",
-      mouth: "mt-1",
-      facialhair: "fh-1",
+      eyes: "ey-36",
+      eyebrows: "eb-9",
+      nose: "ns-10",
+      mouth: "mt-10",
+      facialhair: "fh-0",
 
-      hair: "bl-s1",
-      hairFront: "bl-s1-front",
-      hairBack: "bl-s1-back",
+      hair: "bk-s10",
+      hairFront: "bk-s10-front",
+      hairBack: "bk-s10-back",
 
-      shirt: "st-1",
-      pants: "pt-1",
-      shoes: "sh-1",
-      hat: "ht-1",
+      shirt: "st-5",
+      jacket: "nb-jk-0",
+      pants: "pt-2",
+      shoes: "sh-2",
+      hat: "ht-0",
 
       accessories: "ac-1",
       background: "bg-1",
@@ -1064,6 +1155,9 @@ export default {
     },
     parsedShirt() {
       return this.base_url + this.shirt + ".PNG";
+    },
+    parsedJacket() {
+      return this.base_url + this.jacket + ".PNG";
     },
     parsedPants() {
       return this.base_url + this.pants + ".PNG";
@@ -1149,6 +1243,7 @@ export default {
             hair: this.hair,
 
             shirt: this.shirt,
+            jacket: this.jacket,
             pants: this.pants,
             shoes: this.shoes,
             hat: this.hat,
@@ -1203,6 +1298,7 @@ export default {
         hair: this.hair,
 
         shirt: this.shirt,
+        jacket: this.jacket,
         pants: this.pants,
         shoes: this.shoes,
         hat: this.hat,
@@ -1227,7 +1323,7 @@ export default {
         if (key != "skin_tone") {
           let avatar_cursor = this.avatar[key];
 
-          if (key == "shirt" || key == "pants") {
+          if (key == "shirt" || key == "pants" || key == "jacket") {
             let gender = this.gender;
             if (gender != "non-binary") {
               avatar_cursor = this.avatar[key][gender];
@@ -1257,6 +1353,7 @@ export default {
           this.setPart(key, avatar_part, true);
         }
       });
+      console.log(this.avatar_snapshots);
     },
     reset() {
       let avatar_keys = Object.keys(this.avatar);
@@ -1365,16 +1462,16 @@ $gray3: #8c929d;
     }
 
     .option-item {
-      background: $lightBlue;
+      // background: $lightBlue;
       cursor: pointer;
       height: 95.19px;
-      border: 2px solid black;
+      border: 4px solid #ccc;
       transition: 0.1s;
       position: relative;
       border-radius: 5px;
 
       &.active {
-        border: 5px solid $purple;
+        border: 4px solid $purple;
       }
 
       img {
@@ -1404,7 +1501,63 @@ $gray3: #8c929d;
 
     .option-head {
       background-size: 270% !important;
-      background-position: -70px 225px !important;
+      background-position: -72px 232px !important;
+    }
+    .option-ear {
+      background-size: 377% !important;
+      background-position: -117px 299px !important;
+    }
+    .option-hair {
+      background-size: 222% !important;
+      background-position: -235px 386px !important;
+    }
+    .option-eyebrows {
+      background-size: 400% !important;
+      background-position: -124px 319px !important;
+    }
+    .option-eyes {
+      background-size: 400% !important;
+      background-position: -124px 319px !important;
+    }
+    .option-nose {
+      background-size: 500% !important;
+      background-position: -167px 369px !important;
+    }
+    .option-mouth {
+      background-size: 500% !important;
+      background-position: -172px 369px !important;
+    }
+    .option-facialhair {
+      background-size: 500% !important;
+      background-position: -167px 369px !important;
+    }
+    .option-shirt {
+      background-position: -53px -39px !important;
+      background-size: 228% !important;
+    }
+    .option-pants {
+      background-size: 180% !important;
+      background-position: 119px 87px !important;
+    }
+    .option-shoes {
+      background-position: 167px 819px !important;
+      background-size: 306% !important;
+    }
+    .option-hat {
+      background-position: 174px 21px !important;
+      background-size: 310% !important;
+    }
+    .option-jacket {
+      background-position: -55px -50px !important;
+      background-size: 230% !important;
+    }
+    .option-accessories {
+      background-position: 10px -150px !important;
+      background-size: 380% !important;
+    }
+    .option-skintone {
+      background-position: -10px -22px !important;
+      background-size: 128% !important;
     }
   }
 }

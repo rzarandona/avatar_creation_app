@@ -9,6 +9,8 @@
       <img :src="parsedShoes" alt="" />
       <img :src="parsedPants" alt="" />
       <img :src="parsedShirt" alt="" />
+
+      <img :src="parsedJacket" alt="" />
       <img :src="parsedHead" alt="" />
 
       <img :src="parsedEyes" alt="" />
@@ -38,6 +40,7 @@ export default {
     "parsedFacialhair",
     "parsedPants",
     "parsedShirt",
+    "parsedJacket",
     "parsedShoes",
     "parsedHat",
 
