@@ -28,6 +28,7 @@
             :parsedHat="parsedHat"
             :parsedAccessories="parsedAccessories"
             :parsedBackground="parsedBackground"
+            :is_img_loading="is_img_loading"
           />
 
           <div class="customizer">
@@ -475,18 +476,16 @@
             @click="undo"
             class="undo"
           >
-            <font-awesome-icon icon="undo" />
-            Undo
+            <font-awesome-icon icon="undo" /> <span>Undo</span>
           </button>
           <button :disabled="action_observer == 0" @click="redo" class="redo">
-            <font-awesome-icon icon="redo" />
-            Redo
+            <font-awesome-icon icon="redo" /> <span>Redo</span>
           </button>
           <button @click="randomise" class="randomise">
-            <font-awesome-icon icon="random" /> Randomise
+            <font-awesome-icon icon="random" /> <span>Randomise</span>
           </button>
           <button @click="reset" class="reset">
-            <font-awesome-icon icon="trash" /> Reset
+            <font-awesome-icon icon="trash" /> <span>Reset</span>
           </button>
         </div>
         <div class="set-2">
@@ -494,7 +493,7 @@
             <font-awesome-icon icon="share" /> Share
           </button> -->
           <button @click="download" class="download">
-            <font-awesome-icon icon="download" /> Download Avatar!
+            <font-awesome-icon icon="download" /> <span> Download Avatar!</span>
           </button>
         </div>
       </div>
@@ -516,9 +515,10 @@ export default {
   data() {
     return {
       // base_url: "http://localhost/avatar/assets/parts/",
-      base_url: "http://vps-582f91.stackvps.com/assets/parts/",
+      base_url: "https://charactercreator.online/assets/parts/",
 
       is_loading: false,
+      is_img_loading: false,
 
       // Flags
       picked_gender: false,
@@ -561,6 +561,7 @@ export default {
         ],
         shirt: {
           male: [
+            "st-0",
             "ml-sh-1",
             "ml-sh-2",
             "ml-sh-3",
@@ -588,6 +589,7 @@ export default {
             "ml-sh-25",
           ],
           female: [
+            "st-0",
             "fm-sh-1",
             "fm-sh-2",
             "fm-sh-3",
@@ -611,11 +613,12 @@ export default {
           ],
         },
         jacket: {
-          male: ["ml-jk-1", "ml-jk-2", "ml-jk-3", "ml-jk-4"],
-          female: ["fm-jk-1", "fm-jk-2"],
+          male: ["nb-jk-0", "ml-jk-1", "ml-jk-2", "ml-jk-3", "ml-jk-4"],
+          female: ["nb-jk-0", "fm-jk-1", "fm-jk-2"],
         },
         pants: {
           male: [
+            "pt-0",
             "ml-pt-1",
             "ml-pt-2",
             "ml-pt-3",
@@ -624,6 +627,7 @@ export default {
             "ml-pt-6",
           ],
           female: [
+            "pt-0",
             "fm-pt-1",
             "fm-pt-2",
             "fm-pt-3",
@@ -642,6 +646,7 @@ export default {
           ],
         },
         shoes: [
+          "sh-0",
           "sh-1",
           "sh-2",
           "sh-3",
@@ -686,6 +691,7 @@ export default {
           "sh-42",
         ],
         hat: [
+          "ht-0",
           "ht-1",
           "ht-2",
           "ht-3",
@@ -1094,7 +1100,7 @@ export default {
       eyes: "ey-36",
       eyebrows: "eb-9",
       nose: "ns-10",
-      mouth: "mt-10",
+      mouth: "mt-8",
       facialhair: "fh-0",
 
       hair: "bk-s10",
@@ -1181,6 +1187,16 @@ export default {
       return this.base_url + "bd-1.PNG$" + skin_tone + ".PNG";
     },
     setSkinTone(skin_tone) {
+      this.is_img_loading = false;
+      this.is_img_loading = true;
+
+      var url = this.base_url + this.body + ".PNG";
+      var img = new Image();
+      img.src = url;
+      img.onload = () => {
+        this.is_img_loading = false;
+      };
+
       this.skin_tone = skin_tone;
       // Change body color
       let new_body_value =
@@ -1220,10 +1236,26 @@ export default {
       return this.base_url + hair_code + "-front.PNG";
     },
     setPart(part, value, persist_as_snapshot) {
+      this.is_img_loading = false;
+      this.is_img_loading = true;
+
       this[part] = value;
       if (part == "hair") {
         this.hairFront = value + "-front";
         this.hairBack = value + "-back";
+        var url = this.base_url + value + "-back" + ".PNG";
+        var img = new Image();
+        img.src = url;
+        img.onload = () => {
+          this.is_img_loading = false;
+        };
+      } else {
+        var url = this.base_url + value + ".PNG";
+        var img = new Image();
+        img.src = url;
+        img.onload = () => {
+          this.is_img_loading = false;
+        };
       }
       if (persist_as_snapshot) {
         if (this.action_observer != 0) {
@@ -1356,25 +1388,55 @@ export default {
       console.log(this.avatar_snapshots);
     },
     reset() {
-      let avatar_keys = Object.keys(this.avatar);
+      let default_avatar = {
+        body: "bd-1.PNG$tone1",
+        head: "fs-1.PNG$tone1",
+        ear: "ea-1.PNG$tone1",
+
+        eyes: "ey-36",
+        eyebrows: "eb-9",
+        nose: "ns-10",
+        mouth: "mt-8",
+        facialhair: "fh-0",
+
+        hair: "bk-s10",
+        hairFront: "bk-s10-front",
+        hairBack: "bk-s10-back",
+
+        shirt: "st-5",
+        jacket: "nb-jk-0",
+        pants: "pt-2",
+        shoes: "sh-2",
+        hat: "ht-0",
+
+        accessories: "ac-1",
+        background: "bg-1",
+      };
+      let avatar_keys = Object.keys(default_avatar);
       avatar_keys.forEach((key) => {
-        // If block is so that skin_tone will not be included in the reset
-        if (key != "skin_tone") {
-          if (this[key] != this.avatar[key][0]) {
-            this.setPart(key, this.avatar[key][0], true);
-          }
-        }
+        this.setPart(key, default_avatar[key], true);
       });
+
       this.avatar_snapshots = [];
       this.saveCurrentSnapshot();
     },
     download() {
       this.is_loading = true;
       let node = document.getElementById("preview-container");
-      domtoimage.toBlob(node).then((blob) => {
-        FileSaver.saveAs(blob, "my-avatar.png");
-        this.is_loading = false;
-      });
+
+      domtoimage
+        .toBlob(node, {
+          width: node.clientWidth * 3,
+          height: node.clientHeight * 3,
+          style: {
+            transform: "scale(" + 3 + ")",
+            transformOrigin: "top left",
+          },
+        })
+        .then((blob) => {
+          FileSaver.saveAs(blob, "my-avatar.png");
+          this.is_loading = false;
+        });
     },
   },
   components: {
@@ -1552,8 +1614,8 @@ $gray3: #8c929d;
       background-size: 230% !important;
     }
     .option-accessories {
-      background-position: 10px -150px !important;
-      background-size: 380% !important;
+      background-position: 20px -70px !important;
+      background-size: 186% !important;
     }
     .option-skintone {
       background-position: -10px -22px !important;
@@ -1673,9 +1735,131 @@ $gray3: #8c929d;
       border-radius: 4px;
       border: none;
       box-shadow: 0 6px 5px 0 rgba(0, 0, 0, 0.09);
-      margin-right: 10px;
       color: white;
     }
+  }
+}
+
+@media (max-width: 1090px) {
+  .card {
+    margin: 0;
+    .builder-interface {
+      grid-template-columns: 1fr;
+      margin: 0 auto;
+      width: 550px;
+
+      .preview {
+        padding: 0 25px;
+      }
+    }
+  }
+  .builder-tools {
+    grid-template-columns: 1fr auto;
+    padding: 10px;
+    position: sticky;
+    background: white;
+    box-shadow: 0 0 10px 0px rgba(0, 0, 0, 0.2);
+    bottom: 10px;
+    border-radius: 10px;
+    z-index: 2;
+  }
+}
+
+@media (max-width: 970px) {
+  .main-label {
+    margin: 20px !important;
+    font-size: 20px;
+  }
+  .builder-tools {
+    .undo {
+      span {
+        display: none;
+      }
+    }
+    .redo {
+      span {
+        display: none;
+      }
+    }
+    .randomise {
+      span {
+        display: none;
+      }
+    }
+    .reset {
+      span {
+        display: none;
+      }
+    }
+    .download {
+      span {
+        display: none;
+      }
+    }
+  }
+}
+
+@media (max-width: 610px) {
+  .preview {
+    padding: 0 !important;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+  }
+  .customizer {
+    margin-top: 20px;
+  }
+  .builder-interface {
+    width: 100% !important;
+  }
+  .tab-pills {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  .option-list {
+    grid-template-columns: 1fr 1fr 1fr !important;
+    place-items: center;
+    .option-item {
+      width: 92px;
+      z-index: 1;
+    }
+  }
+  .builder-tools {
+    .undo {
+      padding: 5px 10px !important;
+    }
+    .redo {
+      padding: 5px 10px !important;
+    }
+    .randomise {
+      padding: 5px 10px !important;
+    }
+    .reset {
+      padding: 5px 10px !important;
+      margin: 0;
+    }
+    .download {
+      padding: 5px 10px !important;
+    }
+  }
+}
+
+@media (max-width: 410px) {
+  .card {
+    padding: 0;
+  }
+  .tab-pills {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  .option-list {
+    grid-template-columns: 1fr 1fr 1fr !important;
+  }
+}
+@media (max-width: 320px) {
+  .tab-pills {
+    grid-template-columns: 1fr 1fr;
+  }
+  .option-list {
+    grid-template-columns: 1fr 1fr !important;
   }
 }
 </style>

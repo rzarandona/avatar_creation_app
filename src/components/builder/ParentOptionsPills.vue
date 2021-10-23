@@ -118,4 +118,15 @@ $gray3: #8c929d;
     }
   }
 }
+
+@media (max-width: 610px) {
+  .parent-tab-pills {
+    grid-template-columns: 1fr 1fr;
+    font-size: 14px;
+    .parent-tab-pill {
+      border-radius: 0 !important;
+      border-width: 1px !important;
+    }
+  }
+}
 </style>

@@ -84,4 +84,50 @@ $gray3: #8c929d;
     }
   }
 }
+
+@media (max-width: 970px) {
+  .main-label {
+    margin: 20px !important;
+    font-size: 20px;
+  }
+  .gender-picker {
+    .gender-list {
+      grid-gap: 10px;
+
+      .gender-item {
+        min-height: 300px;
+        .gender-icon {
+          font-size: 50px;
+        }
+        .label {
+          bottom: -15px;
+          padding: 2px 20px;
+        }
+      }
+    }
+  }
+}
+@media (max-width: 480px) {
+  .gender-picker {
+    .gender-list {
+      grid-gap: 10px;
+      grid-template-columns: 1fr;
+
+      .gender-item {
+        min-height: 100px;
+        max-width: 200px;
+        margin: 0 auto;
+        margin-bottom: 20px;
+        .gender-icon {
+          font-size: 50px;
+        }
+        .label {
+          bottom: -15px;
+          font-size: 14px;
+          padding: 2px 20px;
+        }
+      }
+    }
+  }
+}
 </style>
