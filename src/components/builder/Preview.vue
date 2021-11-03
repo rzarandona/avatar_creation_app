@@ -72,7 +72,7 @@ export default {
 <style lang="scss">
 .preview-container {
   position: relative;
-  background: #999;
+  background: rgba(153, 153, 153, 0.116);
 
   img {
     width: 90%;

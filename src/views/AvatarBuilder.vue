@@ -503,8 +503,22 @@
 
 <script>
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import domtoimage from "dom-to-image";
+
+// for detecting browser
+import { detect } from "detect-browser";
+
+// for ios, and macos safari support
 import FileSaver from "file-saver";
+import html2canvas from "html2canvas";
+import { canvasToBlob } from "blob-util";
+
+// for chrome and other browsers Support
+import domtoimage from "dom-to-image";
+
+import axios from "axios";
+import qs from "qs";
+
+import swal from "sweetalert2";
 
 import Loader from "../components/Loader.vue";
 import GenderPicker from "../components/builder/GenderPicker.vue";
@@ -1424,19 +1438,56 @@ export default {
       this.is_loading = true;
       let node = document.getElementById("preview-container");
 
-      domtoimage
-        .toBlob(node, {
-          width: node.clientWidth * 3,
-          height: node.clientHeight * 3,
-          style: {
-            transform: "scale(" + 3 + ")",
-            transformOrigin: "top left",
-          },
-        })
-        .then((blob) => {
-          FileSaver.saveAs(blob, "my-avatar.png");
+      const browser = detect();
+      if (browser.name == "ios" || browser.name == "safari") {
+        /* SAFARI CODE */
+        html2canvas(node).then((canvas) => {
+          canvasToBlob(canvas, "image/png").then((blob) => {
+            FileSaver.saveAs(blob, "my-avatar.png");
+          });
           this.is_loading = false;
         });
+      } else if (browser.name == "crios") {
+        html2canvas(node).then((canvas) => {
+          let base64_string = canvas.toDataURL();
+          axios
+            .post(
+              "https://charactercreator.online/api/avatar_save.php",
+              qs.stringify({
+                base64_string: base64_string,
+              })
+            )
+            .then((res) => {
+              console.log(res.data);
+              swal.fire(
+                "Awesome!",
+                `Since you're on chrome iOS, please manually download your avatar from <a href='${res.data}'>here</a>`,
+                "success"
+              );
+              this.is_loading = false;
+            })
+            .catch((err) => {
+              console.log(err);
+              this.is_loading = false;
+            });
+        });
+      } else {
+        /* CHROME CODE */
+        domtoimage
+          .toBlob(node, {
+            width: node.clientWidth * 3,
+            height: node.clientHeight * 3,
+            style: {
+              transform: "scale(" + 3 + ")",
+              transformOrigin: "top left",
+            },
+          })
+          .then((blob) => {
+            console.log(blob);
+            FileSaver.saveAs(blob, "my-avatar.png");
+            this.is_loading = false;
+          });
+      }
     },
   },
   components: {
