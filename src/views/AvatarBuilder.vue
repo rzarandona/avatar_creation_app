@@ -86,11 +86,26 @@
 
                 <button
                   v-if="active_parent_pill == 'face'"
-                  @click="setActivePill('eyes')"
-                  :class="{ 'tab-pill': true, active: active_pill == 'eyes' }"
+                  @click="setActivePill('eyecolor')"
+                  :class="{
+                    'tab-pill': true,
+                    active: active_pill == 'eyecolor',
+                  }"
                 >
-                  Eyes
+                  Eye Color
                 </button>
+
+                <button
+                  v-if="active_parent_pill == 'face'"
+                  @click="setActivePill('eyes')"
+                  :class="{
+                    'tab-pill': true,
+                    active: active_pill == 'eyes',
+                  }"
+                >
+                  Eye Shape
+                </button>
+
                 <button
                   v-if="active_parent_pill == 'face'"
                   @click="setActivePill('nose')"
@@ -257,12 +272,28 @@
               </div>
 
               <div
+                v-if="active_pill == 'eyecolor'"
+                class="option-list eyecolor-options my-3"
+              >
+                <div
+                  v-for="item in avatar.eyecolor"
+                  @click="setEyeColor(item)"
+                  :class="{
+                    'option-eyecolor': true,
+                    'option-item': true,
+                    active: eyecolor == item,
+                  }"
+                  :style="{ background: 'url(' + getEyeColor(item) + ')' }"
+                ></div>
+              </div>
+
+              <div
                 v-if="active_pill == 'eyes'"
                 class="option-list eyes-options my-3"
               >
                 <div
-                  v-for="item in avatar.eyes"
-                  @click="setPart('eyes', item, true)"
+                  v-for="item in avatar.eyes[eyecolor]"
+                  @click="setEye(item)"
                   :class="{
                     'option-eyes': true,
                     'option-item': true,
@@ -575,7 +606,6 @@ export default {
         ],
         shirt: {
           male: [
-            "st-0",
             "ml-sh-1",
             "ml-sh-2",
             "ml-sh-3",
@@ -603,7 +633,6 @@ export default {
             "ml-sh-25",
           ],
           female: [
-            "st-0",
             "fm-sh-1",
             "fm-sh-2",
             "fm-sh-3",
@@ -612,8 +641,6 @@ export default {
             "fm-sh-6",
             "fm-sh-7",
             "fm-sh-8",
-            "fm-sh-9",
-            "fm-sh-10",
             "fm-sh-11",
             "fm-sh-12",
             "fm-sh-13",
@@ -632,7 +659,6 @@ export default {
         },
         pants: {
           male: [
-            "pt-0",
             "ml-pt-1",
             "ml-pt-2",
             "ml-pt-3",
@@ -641,7 +667,6 @@ export default {
             "ml-pt-6",
           ],
           female: [
-            "pt-0",
             "fm-pt-1",
             "fm-pt-2",
             "fm-pt-3",
@@ -718,169 +743,199 @@ export default {
           "ht-10",
         ],
 
-        eyes: [
-          "ey-1",
-          "ey-2",
-          "ey-3",
-          "ey-4",
-          "ey-5",
-          "ey-6",
-          "ey-7",
-          "ey-8",
-          "ey-9",
-          "ey-10",
-          "ey-11",
-          "ey-12",
-          "ey-13",
-          "ey-14",
-          "ey-15",
-          "ey-16",
-          "ey-17",
-          "ey-18",
-          "ey-19",
-          "ey-20",
-          "ey-21",
-          "ey-22",
-          "ey-23",
-          "ey-24",
-          "ey-25",
-          "ey-26",
-          "ey-27",
-          "ey-28",
-          "ey-29",
-          "ey-30",
-          "ey-31",
-          "ey-32",
-          "ey-33",
-          "ey-34",
-          "ey-35",
-          "ey-36",
-          "ey-37",
-          "ey-38",
-          "ey-39",
-          "ey-40",
-          "ey-41",
-          "ey-42",
-          "ey-43",
-          "ey-44",
-          "ey-45",
-          "ey-46",
-          "ey-47",
-          "ey-48",
-          "ey-49",
-          "ey-50",
-          "ey-51",
-          "ey-52",
-          "ey-53",
-          "ey-54",
-          "ey-55",
-          "ey-56",
-          "ey-57",
-          "ey-58",
-          "ey-59",
-          "ey-60",
-          "ey-61",
-          "ey-62",
-          "ey-63",
-          "ey-64",
-          "ey-65",
-          "ey-66",
-          "ey-67",
-          "ey-68",
-          "ey-69",
-          "ey-70",
-          "ey-71",
-          "ey-72",
-          "ey-73",
-          "ey-74",
-          "ey-75",
-          "ey-76",
-          "ey-77",
-          "ey-78",
-          "ey-79",
-          "ey-80",
-          "ey-81",
-          "ey-82",
-          "ey-83",
-          "ey-84",
-          "ey-85",
-          "ey-86",
-          "ey-87",
-          "ey-88",
-          "ey-89",
-          "ey-90",
-          "ey-91",
-          "ey-92",
-          "ey-93",
-          "ey-94",
-          "ey-95",
-          "ey-96",
-          "ey-97",
-          "ey-98",
-          "ey-99",
-          "ey-100",
-          "ey-101",
-          "ey-102",
-          "ey-103",
-          "ey-104",
-          "ey-105",
-          "ey-106",
-          "ey-107",
-          "ey-108",
-          "ey-109",
-          "ey-110",
-          "ey-111",
-          "ey-112",
-          "ey-113",
-          "ey-114",
-          "ey-115",
-          "ey-116",
-          "ey-117",
-          "ey-118",
-          "ey-119",
-          "ey-120",
-          "ey-121",
-          "ey-122",
-          "ey-123",
-          "ey-124",
-          "ey-125",
-          "ey-126",
-          "ey-127",
-          "ey-128",
-          "ey-129",
-          "ey-130",
-          "ey-131",
-          "ey-132",
-          "ey-133",
-          "ey-134",
-          "ey-135",
-          "ey-136",
-          "ey-137",
-          "ey-138",
-          "ey-139",
-          "ey-140",
-          "ey-141",
-          "ey-142",
-          "ey-143",
-          "ey-144",
-          "ey-145",
-          "ey-146",
-          "ey-147",
-          "ey-148",
-          "ey-149",
-          "ey-150",
-          "ey-151",
-          "ey-152",
-          "ey-153",
-          "ey-154",
-          "ey-155",
-          "ey-156",
-          "ey-157",
-          "ey-158",
-          "ey-159",
-          "ey-160",
-          "ey-161",
-          "ey-162",
+        eyes: {
+          cl1: [
+            "cl1-ey-152",
+            "cl1-ey-108",
+            "cl1-ey-119",
+            "cl1-ey-13",
+            "cl1-ey-130",
+            "cl1-ey-141",
+            "cl1-ey-1",
+            "cl1-ey-2",
+            "cl1-ey-24",
+            "cl1-ey-35",
+            "cl1-ey-46",
+            "cl1-ey-72",
+            "cl1-ey-73",
+            "cl1-ey-75",
+            "cl1-ey-86",
+            "cl1-ey-97",
+          ],
+          cl10: [
+            "cl10-ey-154",
+            "cl10-ey-155",
+            "cl10-ey-156",
+            "cl10-ey-157",
+            "cl10-ey-158",
+            "cl10-ey-159",
+            "cl10-ey-160",
+            "cl10-ey-161",
+            "cl10-ey-162",
+            "cl10-ey-47",
+            "cl10-ey-48",
+            "cl10-ey-49",
+            "cl10-ey-50",
+            "cl10-ey-51",
+            "cl10-ey-70",
+            "cl10-ey-71",
+          ],
+          cl2: [
+            "cl2-ey-83",
+            "cl2-ey-3",
+            "cl2-ey-4",
+            "cl2-ey-5",
+            "cl2-ey-52",
+            "cl2-ey-53",
+            "cl2-ey-6",
+            "cl2-ey-7",
+            "cl2-ey-74",
+            "cl2-ey-76",
+            "cl2-ey-77",
+            "cl2-ey-78",
+            "cl2-ey-79",
+            "cl2-ey-80",
+            "cl2-ey-81",
+            "cl2-ey-82",
+          ],
+          cl3: [
+            "cl3-ey-84",
+            "cl3-ey-10",
+            "cl3-ey-11",
+            "cl3-ey-12",
+            "cl3-ey-54",
+            "cl3-ey-55",
+            "cl3-ey-8",
+            "cl3-ey-85",
+            "cl3-ey-87",
+            "cl3-ey-88",
+            "cl3-ey-89",
+            "cl3-ey-9",
+            "cl3-ey-90",
+            "cl3-ey-91",
+            "cl3-ey-92",
+            "cl3-ey-93",
+          ],
+          cl4: [
+            "cl4-ey-94",
+            "cl4-ey-100",
+            "cl4-ey-101",
+            "cl4-ey-102",
+            "cl4-ey-103",
+            "cl4-ey-14",
+            "cl4-ey-15",
+            "cl4-ey-16",
+            "cl4-ey-17",
+            "cl4-ey-18",
+            "cl4-ey-56",
+            "cl4-ey-58",
+            "cl4-ey-95",
+            "cl4-ey-96",
+            "cl4-ey-98",
+            "cl4-ey-99",
+          ],
+          cl5: [
+            "cl5-ey-104",
+            "cl5-ey-105",
+            "cl5-ey-106",
+            "cl5-ey-107",
+            "cl5-ey-109",
+            "cl5-ey-110",
+            "cl5-ey-111",
+            "cl5-ey-112",
+            "cl5-ey-113",
+            "cl5-ey-19",
+            "cl5-ey-20",
+            "cl5-ey-21",
+            "cl5-ey-22",
+            "cl5-ey-23",
+            "cl5-ey-59",
+            "cl5-ey-60",
+          ],
+          cl6: [
+            "cl6-ey-114",
+            "cl6-ey-115",
+            "cl6-ey-116",
+            "cl6-ey-117",
+            "cl6-ey-118",
+            "cl6-ey-120",
+            "cl6-ey-121",
+            "cl6-ey-122",
+            "cl6-ey-123",
+            "cl6-ey-25",
+            "cl6-ey-26",
+            "cl6-ey-27",
+            "cl6-ey-28",
+            "cl6-ey-29",
+            "cl6-ey-61",
+            "cl6-ey-62",
+          ],
+          cl7: [
+            "cl7-ey-124",
+            "cl7-ey-125",
+            "cl7-ey-126",
+            "cl7-ey-127",
+            "cl7-ey-128",
+            "cl7-ey-129",
+            "cl7-ey-131",
+            "cl7-ey-132",
+            "cl7-ey-133",
+            "cl7-ey-30",
+            "cl7-ey-31",
+            "cl7-ey-32",
+            "cl7-ey-33",
+            "cl7-ey-34",
+            "cl7-ey-63",
+            "cl7-ey-64",
+          ],
+          cl8: [
+            "cl8-ey-134",
+            "cl8-ey-135",
+            "cl8-ey-136",
+            "cl8-ey-137",
+            "cl8-ey-138",
+            "cl8-ey-139",
+            "cl8-ey-140",
+            "cl8-ey-142",
+            "cl8-ey-143",
+            "cl8-ey-36",
+            "cl8-ey-37",
+            "cl8-ey-38",
+            "cl8-ey-39",
+            "cl8-ey-40",
+            "cl8-ey-65",
+            "cl8-ey-66",
+          ],
+          cl9: [
+            "cl9-ey-144",
+            "cl9-ey-145",
+            "cl9-ey-146",
+            "cl9-ey-147",
+            "cl9-ey-148",
+            "cl9-ey-149",
+            "cl9-ey-150",
+            "cl9-ey-151",
+            "cl9-ey-153",
+            "cl9-ey-41",
+            "cl9-ey-42",
+            "cl9-ey-43",
+            "cl9-ey-44",
+            "cl9-ey-45",
+            "cl9-ey-67",
+            "cl9-ey-69",
+          ],
+        },
+        eyecolor: [
+          "cl1",
+          "cl2",
+          "cl3",
+          "cl4",
+          "cl5",
+          "cl6",
+          "cl7",
+          "cl8",
+          "cl9",
+          "cl10",
         ],
         eyebrows: [
           "eb-1",
@@ -958,6 +1013,14 @@ export default {
           "mt-8",
           "mt-9",
           "mt-10",
+          "mt-11",
+          "mt-12",
+          "mt-13",
+          "mt-14",
+          "mt-15",
+          "mt-16",
+          "mt-17",
+          "mt-18",
         ],
         facialhair: [
           "fh-0",
@@ -1112,6 +1175,8 @@ export default {
       ear: "ea-1.PNG$tone1",
 
       eyes: "ey-36",
+      eyecolor: "cl1",
+      eyeshape: "cl1-ey-1",
       eyebrows: "eb-9",
       nose: "ns-10",
       mouth: "mt-8",
@@ -1249,6 +1314,47 @@ export default {
     getHair(hair_code) {
       return this.base_url + hair_code + "-front.PNG";
     },
+    getEyeColor(eyecolor) {
+      return this.base_url + this.avatar.eyes[eyecolor][0] + ".PNG";
+    },
+    setEyeColor(eyecolor) {
+      this.eyecolor = eyecolor;
+      this.active_pill = "eyes";
+    },
+    setEye(eyes) {
+      this.eyes = eyes;
+      if (this.action_observer != 0) {
+        let avatar_snapshots_reference = [...this.avatar_snapshots];
+        let new_avatar_snapshots_reference = avatar_snapshots_reference.slice(
+          this.action_observer
+        );
+        new_avatar_snapshots_reference.unshift({
+          body: this.body,
+          head: this.head,
+          ear: this.ear,
+          eyes: this.eyes,
+          eyebrows: this.eyebrows,
+          nose: this.nose,
+          mouth: this.mouth,
+          facialhair: this.facialhair,
+          hair: this.hair,
+
+          shirt: this.shirt,
+          jacket: this.jacket,
+          pants: this.pants,
+          shoes: this.shoes,
+          hat: this.hat,
+          hair: this.hair,
+
+          accessories: this.accessories,
+          background: this.background,
+        });
+        this.avatar_snapshots = new_avatar_snapshots_reference;
+        this.action_observer = 0;
+      } else {
+        this.saveCurrentSnapshot();
+      }
+    },
     setPart(part, value, persist_as_snapshot) {
       this.is_img_loading = false;
       this.is_img_loading = true;
@@ -1365,8 +1471,7 @@ export default {
       let avatar_keys = Object.keys(this.avatar);
 
       avatar_keys.forEach((key) => {
-        // If block is so that skin_tone will not be included in the randomiser
-        if (key != "skin_tone") {
+        if (key != "skin_tone" && key != "eyes" && key != "eyecolor") {
           let avatar_cursor = this.avatar[key];
 
           if (key == "shirt" || key == "pants" || key == "jacket") {
@@ -1398,8 +1503,14 @@ export default {
           }
           this.setPart(key, avatar_part, true);
         }
+
+        if (key == "eyes") {
+          let random_number = Math.floor(
+            Math.random() * this.avatar.eyes[this.eyecolor].length
+          );
+          this.setEye(this.avatar.eyes[this.eyecolor][random_number]);
+        }
       });
-      console.log(this.avatar_snapshots);
     },
     reset() {
       let default_avatar = {
@@ -1434,6 +1545,15 @@ export default {
       this.avatar_snapshots = [];
       this.saveCurrentSnapshot();
     },
+    swaltest() {
+      swal.fire({
+        title: "Awesome",
+        icon: "",
+        text: "Lorem ipsum",
+        confirmButtonColor: "#f96424",
+        confirmButtonText: "Create Another one",
+      });
+    },
     download() {
       this.is_loading = true;
       let node = document.getElementById("preview-container");
@@ -1459,11 +1579,15 @@ export default {
             )
             .then((res) => {
               console.log(res.data);
-              swal.fire(
-                "Awesome!",
-                `Since you're on chrome iOS, please manually download your avatar from <a href='${res.data}'>here</a>`,
-                "success"
-              );
+
+              swal.fire({
+                title: "Awesome!",
+                icon: "success",
+                text: `Since you're on chrome iOS, please manually download your avatar from <a href='${res.data}'>here</a>`,
+                confirmButtonColor: "#f96424",
+                confirmButtonText: "Create Another one",
+              });
+
               this.is_loading = false;
             })
             .catch((err) => {
@@ -1475,12 +1599,12 @@ export default {
         /* CHROME CODE */
         domtoimage
           .toBlob(node, {
-            width: node.clientWidth * 3,
-            height: node.clientHeight * 3,
-            style: {
-              transform: "scale(" + 3 + ")",
-              transformOrigin: "top left",
-            },
+            // width: node.clientWidth * 3,
+            // height: node.clientHeight * 3,
+            // style: {
+            //   transform: "scale(" + 3 + ")",
+            //   transformOrigin: "top left",
+            // },
           })
           .then((blob) => {
             console.log(blob);
@@ -1628,6 +1752,10 @@ $gray3: #8c929d;
       background-size: 400% !important;
       background-position: -124px 319px !important;
     }
+    .option-eyecolor {
+      background-size: 400% !important;
+      background-position: -124px 319px !important;
+    }
     .option-eyes {
       background-size: 400% !important;
       background-position: -124px 319px !important;
@@ -1638,7 +1766,7 @@ $gray3: #8c929d;
     }
     .option-mouth {
       background-size: 500% !important;
-      background-position: -172px 369px !important;
+      background-position: -166px 358px !important;
     }
     .option-facialhair {
       background-size: 500% !important;
