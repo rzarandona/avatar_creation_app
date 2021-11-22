@@ -2,7 +2,7 @@
   <div class="parent-options">
     <div class="parent-tab-pills">
       <button
-        @click="setActiveParentPill('face', 'head')"
+        @click="setActiveParentPill('face', 'skin_tone')"
         :class="{
           'parent-tab-pill': true,
           active: active_parent_pill == 'face',
@@ -12,7 +12,7 @@
         Face
       </button>
       <button
-        @click="setActiveParentPill('garments', 'shirt')"
+        @click="setActiveParentPill('garments', 'glasses')"
         :class="{
           'parent-tab-pill': true,
           active: active_parent_pill == 'garments',

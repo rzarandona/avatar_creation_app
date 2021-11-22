@@ -17,6 +17,7 @@
             :parsedEyes="parsedEyes"
             :parsedEyebrows="parsedEyebrows"
             :parsedNose="parsedNose"
+            :parsedGlasses="parsedGlasses"
             :parsedMouth="parsedMouth"
             :parsedFacialhair="parsedFacialhair"
             :parsedHairFront="parsedHairFront"
@@ -105,7 +106,6 @@
                 >
                   Eye Shape
                 </button>
-
                 <button
                   v-if="active_parent_pill == 'face'"
                   @click="setActivePill('nose')"
@@ -136,6 +136,15 @@
                 >
                   Facial Hair
                 </button>
+
+                <button
+                  v-if="active_parent_pill == 'garments'"
+                  @click="setActivePill('glasses')"
+                  :class="{ 'tab-pill': true, active: active_pill == 'glasses' }"
+                >
+                  Glasses
+                </button>
+
                 <button
                   v-if="active_parent_pill == 'garments'"
                   @click="setActivePill('shirt')"
@@ -298,6 +307,22 @@
                     'option-eyes': true,
                     'option-item': true,
                     active: eyes == item,
+                  }"
+                  :style="{ background: 'url(' + getPart(item) + ')' }"
+                ></div>
+              </div>
+
+              <div
+                v-if="active_pill == 'glasses'"
+                class="option-list glasses-options my-3"
+              >
+                <div
+                  v-for="item in avatar.glasses"
+                  @click="setPart('glasses', item, true)"
+                  :class="{
+                    'option-glasses': true,
+                    'option-item': true,
+                    active: glasses == item,
                   }"
                   :style="{ background: 'url(' + getPart(item) + ')' }"
                 ></div>
@@ -1002,6 +1027,12 @@ export default {
           "ns-30",
           "ns-31",
         ],
+        glasses: [
+          "gl1",
+          "gl2",
+          "gl3",
+          "gl4"
+        ],
         mouth: [
           "mt-1",
           "mt-2",
@@ -1085,8 +1116,8 @@ export default {
           "fh-59",
           "fh-60",
         ],
-
         hair: [
+          "hr-0",
           "bk-s1",
           "bk-s2",
           "bk-s3",
@@ -1148,7 +1179,6 @@ export default {
           "gr-s9",
           "gr-s10",
         ],
-
         accessories: [
           "ac-2",
           "ac-1",
@@ -1179,6 +1209,7 @@ export default {
       eyeshape: "cl1-ey-1",
       eyebrows: "eb-9",
       nose: "ns-10",
+      glasses: "gl0",
       mouth: "mt-8",
       facialhair: "fh-0",
 
@@ -1231,6 +1262,9 @@ export default {
     },
     parsedNose() {
       return this.base_url + this.nose + ".PNG";
+    },
+    parsedGlasses(){
+      return this.base_url + this.glasses + ".PNG";
     },
     parsedMouth() {
       return this.base_url + this.mouth + ".PNG";
@@ -1335,6 +1369,7 @@ export default {
           eyes: this.eyes,
           eyebrows: this.eyebrows,
           nose: this.nose,
+          glasses: this.glasses,
           mouth: this.mouth,
           facialhair: this.facialhair,
           hair: this.hair,
@@ -1390,6 +1425,7 @@ export default {
             eyes: this.eyes,
             eyebrows: this.eyebrows,
             nose: this.nose,
+            glasses: this.glasses,
             mouth: this.mouth,
             facialhair: this.facialhair,
             hair: this.hair,
@@ -1445,6 +1481,7 @@ export default {
         eyes: this.eyes,
         eyebrows: this.eyebrows,
         nose: this.nose,
+        glasses: this.glasses,
         mouth: this.mouth,
         facialhair: this.facialhair,
         hair: this.hair,
@@ -1520,6 +1557,7 @@ export default {
 
         eyes: "ey-36",
         eyebrows: "eb-9",
+        glasses: "gl0",
         nose: "ns-10",
         mouth: "mt-8",
         facialhair: "fh-0",
@@ -1598,14 +1636,7 @@ export default {
       } else {
         /* CHROME CODE */
         domtoimage
-          .toBlob(node, {
-            // width: node.clientWidth * 3,
-            // height: node.clientHeight * 3,
-            // style: {
-            //   transform: "scale(" + 3 + ")",
-            //   transformOrigin: "top left",
-            // },
-          })
+          .toBlob(node)
           .then((blob) => {
             console.log(blob);
             FileSaver.saveAs(blob, "my-avatar.png");
@@ -1757,6 +1788,10 @@ $gray3: #8c929d;
       background-position: -124px 319px !important;
     }
     .option-eyes {
+      background-size: 400% !important;
+      background-position: -124px 319px !important;
+    }
+    .option-glasses{
       background-size: 400% !important;
       background-position: -124px 319px !important;
     }

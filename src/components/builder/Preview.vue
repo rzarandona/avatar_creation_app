@@ -19,6 +19,7 @@
       <img :src="parsedEyes" alt="" />
       <img :src="parsedEyebrows" alt="" />
       <img :src="parsedNose" alt="" />
+      <img :src="parsedGlasses" alt="" />
       <img :src="parsedMouth" alt="" />
       <img :src="parsedHairFront" alt="" />
       <img :src="parsedHat" alt="" />
@@ -39,6 +40,7 @@ export default {
     "parsedHairFront",
     "parsedHairBack",
     "parsedNose",
+    "parsedGlasses",
     "parsedMouth",
     "parsedFacialhair",
     "parsedPants",
